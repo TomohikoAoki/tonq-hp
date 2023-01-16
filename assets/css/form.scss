@@ -1,0 +1,841 @@
+/**
+ * CSS設計は原則的にMindBEMdingで行う。
+ * バリエーション分け（Modifier）はハイフン始まりのマルチクラスで行う。
+ * 状態管理は原則的にWAI-ARIAおよびdata属性で行う。
+ * JSで生成する要素のclass名はアンスコ始まりにして疑似BEM風にする。
+ */
+
+
+/**
+ * inputのバリデーションは擬似クラスは使わずにJSで行うようにする
+ * 擬似クラスを使うと初期状態でバリデーションが表示されてユーザーの望む動きではないため。
+ */
+
+$header-base-width: 240px !default;
+$content-base-width: 580px !default;
+$form-base-width: $header-base-width+$content-base-width !default;
+$input-base-width-lg: $content-base-width !default;
+$input-base-width-md: $content-base-width - 140px !default;
+$input-base-width-sm: $content-base-width - 340px !default;
+.form {
+    background-color: var(--white-color-secondary);
+    margin: 0 auto;
+    @media screen and (min-width: 0) {
+        font-size: 0.75rem;
+        padding: 40px 5%;
+    }
+    @media screen and (min-width: 768px) {
+        font-size: 0.875rem;
+        padding: 40px;
+    }
+    @media screen and (min-width: 992px) {
+        font-size: 1rem;
+    }
+}
+
+.form__headline {
+    font-weight: normal;
+    margin: 0;
+    @media screen and (min-width: 0) {
+        font-size: 1.75em;
+    }
+    @media screen and (min-width: 768px) {
+        font-size: 1.5em;
+    }
+}
+
+.form__description {
+    line-height: 1.75;
+    margin-top: 2em;
+    &> :not(:first-child) {
+        margin-top: 0.25em;
+    }
+}
+
+.form__group {
+    border: 0;
+    /* デフォルトのfieldsetのスタイルをリセットします */
+    margin-top: 3em;
+    min-width: 0;
+    /* デフォルトのfieldsetのスタイルをリセットします */
+    padding: 0;
+    /* デフォルトのfieldsetのスタイルをリセットします */
+    &+& {
+        margin-top: 1.5em;
+    }
+    &::after {
+        clear: both;
+        content: "";
+        display: table;
+    }
+}
+
+.form__group-header {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    float: left;
+    max-width: $header-base-width;
+    padding: 0.8em 1.2em 0.8em 0;
+    width: 100%;
+    @media screen and (min-width: 0) {
+        font-size: 1.333em;
+    }
+    @media screen and (min-width: 768px) {
+        font-size: 1em;
+    }
+}
+
+.form__group-label {
+    display: inline-block;
+    line-height: 1.5;
+    &>* {
+        margin-left: 0.5em;
+    }
+}
+
+.form__required-label {
+    background-color: var(--gray-color-primary);
+    border-radius: 3px;
+    font-size: 0.75em;
+    font-weight: normal;
+    letter-spacing: 0.08em;
+    padding: 0.35em 0.6em;
+}
+
+.form__group-content {
+    float: left;
+    max-width: $content-base-width;
+    width: 100%;
+}
+
+.form__group-list {
+    border-bottom: 1px solid var(--gray-color-primary);
+    list-style: none;
+    padding: 0.8em 0 1em;
+}
+
+.form__group-list-item {
+    &+& {
+        margin-top: 1em;
+    }
+}
+
+.form__text-input {
+    max-width: $input-base-width-md;
+    &.-narrow {
+        max-width: $input-base-width-sm;
+    }
+    &.-wide {
+        max-width: $input-base-width-lg;
+    }
+}
+
+.form__select-box {
+    max-width: $input-base-width-sm;
+}
+
+.form__name {
+    display: flex;
+    max-width: $input-base-width-md;
+    &>.form__text-input {
+        flex: 1;
+    }
+    &> :not(:last-child) {
+        margin-right: 1em;
+    }
+}
+
+.form__postal-code {
+    @media screen and (min-width: 0) {
+        & > :not(:last-child) {
+            margin-bottom: 1em;
+        }
+    }
+    @media screen and (min-width: 576px) {
+        align-items: center;
+        display: flex;
+        &>.form__text-input {
+            flex-basis: 100%;
+        }
+        &> :not(:last-child) {
+            margin-bottom: 0;
+            margin-right: 1em;
+        }
+    }
+}
+
+.form__notion {
+    margin-top: 1em;
+    @media screen and (min-width: 0) {
+        font-size: 1em;
+    }
+    @media screen and (min-width: 768px) {
+        font-size: 0.75em;
+    }
+}
+
+.form__link {
+    color: var(--active-color);
+    text-decoration: undeline;
+    text-underline-offset: 0.1em;
+    &:focus {
+        text-decoration: none;
+    }
+    @media (hover) {
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+.form__confirm,
+.form__submit {
+    max-width: $form-base-width;
+}
+
+.form__confirm {
+    margin-top: 2.5em;
+    text-align: center;
+}
+
+.form__confirm-text {
+    display: inline-block;
+    text-align: left;
+    /* 複数行になった時は左寄せする */
+}
+
+.form__validation {
+    color: var(--invalid-color);
+    margin-top: 1em;
+    &:empty {
+        display: none;
+    }
+    &:not(:empty)+& {
+        margin-top: 0.5em;
+    }
+    @media screen and (min-width: 0) {
+        font-size: 1em;
+    }
+    @media screen and (min-width: 768px) {
+        font-size: 0.75em;
+    }
+}
+
+.form__submit {
+    align-items: center;
+    display: flex;
+    flex-direction: column-reverse;
+    margin-top: 3em;
+}
+
+
+/**
+    * テキストインプットのコンポーネントです。
+    * @usage
+    * <p class="text-input">
+    *   <input class="text-input__body" type="text">
+    *   <span class="text-input__validator"></span>
+    * </p>
+    */
+
+.text-input {
+    font-size: 1rem;
+    position: relative;
+    z-index: 0;
+}
+
+.text-input__body {
+    appearance: none;
+    background-color: transparent;
+    border: 1px solid var(--gray-color-primary);
+    border-radius: 0;
+    height: 3.125em;
+    line-height: 3.125;
+    overflow: hidden;
+    padding: 0 1em;
+    text-overflow: ellipsis;
+    transition: background-color 0.3s;
+    width: 100%;
+    &::placeholder {
+        color: var(--gray-color-secondary);
+    }
+    padding-right: 2.5em;
+    &[data-is-valid] {
+        /* `[data-is-valid]`セレクタが付与している時はアイコン分右端の余白をあけます */
+        padding-right: 2.5em;
+    }
+    &[data-is-valid="true"] {
+        border-color: var(--valid-color);
+        box-shadow: inset 0 0 0 1px var(--valid-color);
+    }
+    &[data-is-valid="false"] {
+        border-color: var(--invalid-color);
+        box-shadow: inset 0 0 0 1px var(--invalid-color);
+    }
+    &:focus {
+        border-color: var(--active-color);
+        box-shadow: inset 0 0 0 1px var(--active-color);
+        outline: none;
+        /* フォーカスリングはbox-shadowで作るのでoutlineは無効化する */
+    }
+    /* Google Chromeのオートコンプリート時の背景色を止める */
+    &:-webkit-autofill {
+        transition-delay: 9999s;
+        transition-property: background-color;
+    }
+}
+
+.text-input__validator {
+    background-position: right 0.5em center;
+    background-repeat: no-repeat;
+    background-size: 1.5em;
+    display: inline-block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+    .text-input__body[data-is-valid="true"]+& {
+        background-image: var(--valid-icon);
+    }
+    .text-input__body[data-is-valid="false"]+& {
+        background-image: var(--invalid-icon);
+    }
+}
+
+
+/**
+    * セレクトボックスのコンポーネントです。
+    * @usage
+    * <div class="select-box">
+    *   <select class="select-box__body">
+    *     <option></option>
+    *   </select>
+    * </div>
+    */
+
+.select-box {
+    font-size: 1rem;
+    position: relative;
+    transition: background-color 0.5s ease-out;
+    &::after {
+        border-color: var(--gray-color-secondary) transparent transparent transparent;
+        border-style: solid;
+        border-width: 6px 4px 0;
+        bottom: 0;
+        content: "";
+        display: inline-block;
+        height: 0;
+        margin: auto 0;
+        pointer-events: none;
+        position: absolute;
+        right: 12px;
+        top: 0;
+        width: 0;
+        z-index: 1;
+    }
+}
+
+.select-box__body {
+    appearance: none;
+    background-color: transparent;
+    border: 1px solid var(--gray-color-primary);
+    border-radius: 0;
+    cursor: pointer;
+    height: 3.125em;
+    line-height: 3.125;
+    padding-left: 1em;
+    padding-right: calc(1em + 16px);
+    width: 100%;
+    &[data-is-valid="true"] {
+        border-color: var(--valid-color);
+        box-shadow: inset 0 0 0 1px var(--valid-color);
+    }
+    &[data-is-valid="false"] {
+        border-color: var(--invalid-color);
+        box-shadow: inset 0 0 0 1px var(--invalid-color);
+    }
+    &.focus-visible {
+        border-color: var(--active-color);
+        box-shadow: inset 0 0 0 1px var(--active-color);
+        outline: none; // フォーカスリングはbox-shadowで作るのでoutlineは無効化する
+    }
+    // Google Chromeのオートコンプリート時の背景色を止める
+    &:-webkit-autofill {
+        transition-delay: 9999s;
+        transition-property: background-color;
+    }
+}
+
+
+/**
+    * チェックボックスのコンポーネントです。
+    * @usage
+    * <label class="checkbox">
+    *   <input class="checkbox__input" type="checkbox">
+    *   <span class="checkbox__icon"></span>
+    *   <span class="checkbox__text">ラベルの文言</span>
+    * </label>
+    */
+
+.checkbox {
+    align-items: baselien;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 1rem;
+}
+
+.checkbox__input {
+    border: 0 !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    white-space: nowrap !important;
+    width: 1px !important;
+}
+
+.checkbox__icon {
+    display: inline-block;
+    height: 1.5em;
+    position: relative;
+    width: 1.5em;
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+    }
+    &::before {
+        border: 2px solid var(--gray-color-primary);
+        height: 100%;
+        left: 0;
+        top: 0;
+        transition: border-color 0.5s, opacity 0.5s, transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+        width: 100%;
+        // input[type=checkbox]がチェックされたとき
+        .checkbox__input:checked+& {
+            border-color: var(--valid-color);
+            opacity: 0;
+            pointer-events: none; // クリッカブルな箇所が広がってしまうのでクリックを無効にする
+            transform: rotate(45deg) scale3d(2, 2, 1);
+        }
+    }
+    &::after {
+        border-bottom: 2px solid transparent;
+        border-left: 2px solid transparent;
+        height: 0.5em;
+        left: 0.25em;
+        opacity: 0;
+        top: 0.375em;
+        transform: rotate(-225deg);
+        transition: opacity 0.5s, transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+        width: 1em;
+        // input[type=checkbox]がチェックされたとき
+        .checkbox__input:checked+& {
+            border-bottom: 2px solid var(--valid-color);
+            border-left: 2px solid var(--valid-color);
+            opacity: 1;
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+.checkbox__text {
+    display: inline-block;
+    letter-spacing: 0.01em;
+    line-height: 1.5;
+    position: relative;
+    transition: color 0.3s;
+    .checkbox__input:checked~& {
+        color: var(--valid-color);
+    }
+    // :focus-visibleで指定することでTab移動でfocusされた場合のみfocusを可視化する
+    .checkbox__input.focus-visible~& {
+        color: var(--active-color);
+    }
+    .checkbox__input:disabled~& {
+        color: var(--gray-color-secondary);
+    }
+    @media (hover) {
+        &:hover {
+            color: var(--active-color);
+        }
+    }
+    &::after {
+        background-color: var(--active-color);
+        bottom: -2px;
+        content: "";
+        display: inline-block;
+        height: 2px;
+        left: 0;
+        position: absolute;
+        transform: scale3d(0, 1, 1);
+        transform-origin: right;
+        transition: transform 0.3s;
+        width: 100%;
+        .checkbox__input:disabled~& {
+            content: none;
+        }
+        @mixin isActive {
+            transform: scale3d(1, 1, 1);
+            transform-origin: left;
+        }
+        // :focus-visibleで指定することでTab移動でfocusされた場合のみfocusを可視化する
+        .checkbox__input.focus-visible~& {
+            @include isActive;
+        }
+        @media (hover) {
+            .checkbox:hover & {
+                @include isActive;
+            }
+        }
+    }
+    .checkbox__icon+& {
+        margin-left: 1em;
+    }
+}
+
+
+/**
+    * ラジオボタンのコンポーネントです。
+    * @usage
+    * <label class="radio">
+    *   <input class="radio__input" type="radio">
+    *   <span class="radio__icon"></span>
+    *   <span class="radio__text">ラベルの文言</span>
+    * </label>
+    */
+
+.radio {
+    align-items: center;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 1rem;
+}
+
+.radio__input {
+    border: 0 !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    white-space: nowrap !important;
+    width: 1px !important;
+}
+
+.radio__icon {
+    border: 1px solid var(--gray-color-primary);
+    border-radius: 50%;
+    display: inline-block;
+    height: 1.5em;
+    position: relative;
+    transition: border-color 0.5s;
+    width: 1.5em;
+    .radio__input:checked+& {
+        border-color: var(--valid-color);
+    }
+    &::before,
+    &::after {
+        border-radius: 50%;
+        bottom: 0;
+        content: "";
+        height: 0.75em;
+        left: 0;
+        margin: auto;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 0.75em;
+    }
+    &::before {
+        background-color: var(--gray-color-secondary);
+        transition: background-color 0.5s, opacity 0.5s;
+        // input[type=radio]がチェックされたとき
+        .radio__input:checked+& {
+            background-color: var(--valid-color);
+            opacity: 1;
+        }
+    }
+    &::after {
+        // input[type=radio]がチェックされたとき
+        .radio__input:checked+& {
+            animation: radio-ripple 0.8s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+            background-color: var(--valid-color);
+            pointer-events: none; // クリッカブルな箇所が広がってしまうのでクリックを無効にする
+        }
+    }
+}
+
+@keyframes radio-ripple {
+    0% {
+        opacity: 0.8;
+        transform: scale3d(1, 1, 1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale3d(4, 4, 1);
+    }
+}
+
+.radio__text {
+    display: inline-block;
+    letter-spacing: 0.01em;
+    line-height: 1.5;
+    position: relative;
+    transition: color 0.3s;
+    .radio__input:disabled~& {
+        color: var(--gray-color-secondary);
+    }
+    .radio__input:checked~& {
+        color: var(--valid-color);
+    }
+    // :focus-visibleで指定することでTab移動でfocusされた場合のみfocusを可視化する
+    .radio__input.focus-visible~& {
+        color: var(--active-color);
+    }
+    @media (hover) {
+        &:hover {
+            color: var(--active-color);
+        }
+    }
+    &::after {
+        background-color: var(--active-color);
+        bottom: -2px;
+        content: "";
+        display: inline-block;
+        height: 2px;
+        left: 0;
+        position: absolute;
+        transform: scale3d(0, 1, 1);
+        transform-origin: right;
+        transition: transform 0.3s;
+        width: 100%;
+        .radio__input:disabled~& {
+            content: none;
+        }
+        @mixin isActive {
+            transform: scale3d(1, 1, 1);
+            transform-origin: left;
+        }
+        // :focus-visibleで指定することでTab移動でfocusされた場合のみfocusを可視化する
+        .radio__input.focus-visible~& {
+            @include isActive;
+        }
+        @media (hover) {
+            .radio:hover & {
+                @include isActive;
+            }
+        }
+    }
+    .radio__icon+& {
+        margin-left: 1em;
+    }
+}
+
+
+/**
+    * テキストエリアのコンポーネントです。
+    * JSを利用することで自動伸縮するテキストエリアになります。
+    * その場合、高さを調整する要素`._dummy-box`がJSにより生成されます。
+    * @usage
+    * <div class="textarea js-flexible-textarea">
+    *   <textarea class="textarea__body"></textarea>
+    * </div>
+    */
+
+.textarea {
+    font-size: 1rem;
+    line-height: 1.5;
+    position: relative;
+}
+
+.textarea__body {
+    appearance: none;
+    background-color: transparent;
+    border: 1px solid var(--gray-color-primary);
+    border-radius: 0;
+    box-sizing: border-box;
+    font: inherit;
+    height: 100%;
+    left: 0;
+    letter-spacing: inherit;
+    overflow: hidden;
+    padding: 1em;
+    position: absolute;
+    resize: none;
+    top: 0;
+    transition: background-color 0.5s ease-out;
+    width: 100%;
+    // JSで自動伸縮しない場合はある程度の高さで固定する。
+    &:only-child {
+        min-height: 240px;
+        position: relative;
+        resize: vertical;
+    }
+    &:focus {
+        border-color: var(--active-color);
+        box-shadow: inset 0 0 0 1px var(--active-color);
+        outline: none; // フォーカスリングはbox-shadowで作るのでoutlineは無効化する
+    }
+    &[data-is-valid="true"] {
+        border-color: var(--valid-color);
+        box-shadow: inset 0 0 0 1px var(--valid-color);
+    }
+    &[data-is-valid="false"] {
+        border-color: var(--invalid-color);
+        box-shadow: inset 0 0 0 1px var(--invalid-color);
+    }
+}
+
+.textarea ._dummy-box {
+    border: 1px solid;
+    box-sizing: border-box;
+    min-height: 240px;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    padding: 1em;
+    visibility: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+
+/**
+    * ファイル選択のコンポーネントです。
+    * JSを利用することで選択されたファイル名を出力できます。
+    * その場合、ファイル名を出力する要素`._selected-file`がJSにより生成されます。
+    * @usage
+    * <div class="file-select js-flie-select">
+    *   <input id="file" class="file-select__input" type="file">
+    *   <label class="file-select__button" for="file">ファイルを選択する</label>
+    * </div>
+    */
+
+.file-select {
+    align-items: center;
+    display: flex;
+    font-size: 1rem;
+}
+
+.file-select__input {
+    border: 0 !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    white-space: nowrap !important;
+    width: 1px !important;
+}
+
+.file-select__button {
+    // ボタンコンポーネントと指定が被っているが、デザインが似ているだけの別物なので重複を許容する。
+    background-color: var(--gray-color-tertiary);
+    border-radius: 3px;
+    box-shadow: 2px 2px 3px 0 var(--gray-color-primary);
+    color: var(--white-color-primary);
+    cursor: pointer;
+    display: inline-block;
+    flex-shrink: 0;
+    font-size: 0.75em;
+    letter-spacing: 0.08em;
+    padding: 1em 1.5em;
+    transition: background-color 0.3s;
+    .file-select__input.focus-visible~& {
+        background-color: var(--base-color);
+        outline: 3px solid var(--active-color);
+    }
+    @media (hover) {
+        &:hover {
+            background-color: var(--base-color);
+        }
+    }
+}
+
+.file-select ._selected-file {
+    background-color: var(--gray-color-primary);
+    border-radius: 3px;
+    font-size: 0.875em;
+    letter-spacing: 0.08em;
+    margin-left: 1em;
+    overflow: hidden;
+    padding: 0.35em 0.75em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &:empty {
+        display: none;
+    }
+}
+
+
+/**
+    * ボタンのコンポーネントです。
+    */
+
+.button {
+    appearance: none;
+    background-color: var(--gray-color-tertiary);
+    border: 0;
+    border-radius: 3px;
+    box-shadow: 2px 2px 3px 0 var(--gray-color-primary);
+    color: var(--white-color-primary);
+    cursor: pointer;
+    display: inline-flex;
+    letter-spacing: 0.08em;
+    line-height: inherit;
+    padding: 1em 4em;
+    transition: background-color 0.3s;
+    &.-small {
+        padding: 1em 1.5em;
+        @media screen and (min-width: 0) {
+            font-size: 1em;
+        }
+        @media screen and (min-width: 768px) {
+            font-size: 0.75em;
+        }
+    }
+    &[aria-disabled="true"] {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+    &:not([aria-disabled="true"]):focus {
+        background-color: var(--base-color);
+    }
+    @media (hover) {
+        &:not([aria-disabled="true"]):hover {
+            background-color: var(--base-color);
+        }
+    }
+}
+
+.visually-hidden {
+    border: 0 !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    white-space: nowrap !important;
+    width: 1px !important;
+}
+
+.js-focus-visible :focus:not(.focus-visible) {
+    outline: 0;
+}
+
+ ::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
