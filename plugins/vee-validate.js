@@ -27,7 +27,8 @@ localize({
             zipCode: '郵便番号',
             address: '住所',
             shop: '店舗',
-            content: 'お問い合わせ内容'
+            content: 'お問い合わせ内容',
+            password: 'パスワード'
         },
         messages: {
             email: 'メールアドレスの形式が有効でありません。',

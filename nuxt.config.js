@@ -1,4 +1,5 @@
 export default {
+    mode: 'development',
     // Target: https://go.nuxtjs.dev/config-target
     target: "static",
 
@@ -64,9 +65,8 @@ export default {
                 },
                 services: {
                     auth: {
-                        persistence: "local", // default
+                        persistence: "session", // default
                         initialize: {
-                            onAuthStateChangedMutation: "ON_AUTH_STATE_CHANGED_MUTATION",
                             onAuthStateChangedAction: "onAuthStateChangedAction",
                             subscribeManually: false,
                         },
@@ -77,6 +77,7 @@ export default {
                 },
             },
         ],
+        '@nuxtjs/dotenv'
     ],
 
     // Build Configuration: https://go.nuxtjs.dev/config-build

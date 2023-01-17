@@ -177,7 +177,7 @@ $input-base-width-sm: $content-base-width - 340px !default;
 
 .form__link {
     color: var(--active-color);
-    text-decoration: undeline;
+    text-decoration: underline;
     text-underline-offset: 0.1em;
     &:focus {
         text-decoration: none;
@@ -261,15 +261,11 @@ $input-base-width-sm: $content-base-width - 340px !default;
         color: var(--gray-color-secondary);
     }
     padding-right: 2.5em;
-    &[data-is-valid] {
-        /* `[data-is-valid]`セレクタが付与している時はアイコン分右端の余白をあけます */
-        padding-right: 2.5em;
-    }
-    &[data-is-valid="true"] {
+    &.good {
         border-color: var(--valid-color);
         box-shadow: inset 0 0 0 1px var(--valid-color);
     }
-    &[data-is-valid="false"] {
+    &.bad {
         border-color: var(--invalid-color);
         box-shadow: inset 0 0 0 1px var(--invalid-color);
     }
@@ -297,10 +293,10 @@ $input-base-width-sm: $content-base-width - 340px !default;
     top: 0;
     width: 100%;
     z-index: -1;
-    .text-input__body[data-is-valid="true"]+& {
+    .text-input__body.good+& {
         background-image: var(--valid-icon);
     }
-    .text-input__body[data-is-valid="false"]+& {
+    .text-input__body.bad+& {
         background-image: var(--invalid-icon);
     }
 }
@@ -381,7 +377,7 @@ $input-base-width-sm: $content-base-width - 340px !default;
     */
 
 .checkbox {
-    align-items: baselien;
+    align-items: baseline;
     cursor: pointer;
     display: inline-flex;
     font-size: 1rem;
@@ -805,15 +801,15 @@ $input-base-width-sm: $content-base-width - 340px !default;
             font-size: 0.75em;
         }
     }
-    &[aria-disabled="true"] {
+    &.disable {
         cursor: not-allowed;
         opacity: 0.5;
     }
-    &:not([aria-disabled="true"]):focus {
+    &:focus {
         background-color: var(--base-color);
     }
     @media (hover) {
-        &:not([aria-disabled="true"]):hover {
+        &:hover {
             background-color: var(--base-color);
         }
     }

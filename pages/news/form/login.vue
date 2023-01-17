@@ -8,15 +8,16 @@
           </p>
           <div class="form__group-content">
             <ValidationProvider
-              v-slot="{ errors }"
+              v-slot="{ errors, passed }"
               rules="required|email"
               name="email"
             >
               <div class="form__text-input -wide">
                 <p class="text-input">
                   <input
-                  v-model="formData.email"
+                    v-model="formData.email"
                     class="text-input__body"
+                    :class="{ good: passed, bad:!!errors[0] }"
                     type="email"
                     placeholder="メールアドレス"
                   />
@@ -35,15 +36,16 @@
           </p>
           <div class="form__group-content">
             <ValidationProvider
-              v-slot="{ errors }"
+              v-slot="{ errors,passed }"
               rules="required"
-              name="title"
+              name="password"
             >
               <div class="form__text-input -wide">
                 <p class="text-input">
                   <input
-                  v-model="formData.password"
+                    v-model="formData.password"
                     class="text-input__body"
+                    :class="{ good: passed,bad:!!errors[0] }"
                     type="password"
                     placeholder="パスワード"
                   />
@@ -77,34 +79,49 @@
 
 <script>
 import "~/assets/css/form.scss";
+import { mapGetters } from "vuex";
+
 export default {
   layout() {
     return "form";
   },
   data() {
     return {
-      snackbar: false,
-      snackbarText: 'エラーはありません',
       formData: {
-        email: '',
-        password: ''
-      }
-    }
+        email: "",
+        password: "",
+      },
+    };
   },
   methods: {
-    login() {
-      let that = this
-      this.$fire.auth.signInWithEmailAndPassword(this.formData.email, this.formData.password)
-      .catch(function(error) {
-        that.snackbarText = error.message
-        that.snackbar = true
-      }).then((user) => {
-        console.log('成功');
-        console.log(user);
-        $nuxt.$router.push('/news/form/top')
-      })
+    async login() {
+      const user = await this.$fire.auth.signInWithEmailAndPassword(
+        this.formData.email,
+        this.formData.password
+      );
+    },
+    redirectTop() {
+      this.$router.push("/news/form/top");
+      return false;
+    },
+  },
+  computed: {
+    ...mapGetters({
+      isLogin: "isLogin",
+    }),
+  },
+  watch: {
+    isLogin(val, old) {
+      if (val) {
+        this.redirectTop();
+      }
+    },
+  },
+  created() {
+    if (this.isLogin) {
+      this.redirectTop();
     }
-  }
+  },
 };
 </script>
 

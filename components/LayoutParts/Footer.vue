@@ -127,7 +127,7 @@ export default {
   font-size: 24px;
   color: #5c5c5c;
   padding: 0 0;
-  background: linear-gradient(top, #f2f4f5 0%, #b3b3b3);
+  background: linear-gradient(to bottom, #f2f4f5 0%, #b3b3b3);
   border-radius: 7px;
   border: 1px solid #6b6b6b;
   box-shadow: 0px 1px 3px rgba(000, 000, 000, 0.5),

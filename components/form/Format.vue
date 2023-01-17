@@ -10,7 +10,7 @@
           </p>
           <div class="form__group-content">
             <ValidationProvider
-              v-slot="{ errors }"
+              v-slot="{ errors,passed }"
               rules="required|max:30"
               name="title"
             >
@@ -19,6 +19,7 @@
                   v-model="formData.title"
                   type="text"
                   class="text-input__body"
+                  :class="{ good: passed }"
                   placeholder="タイトル"
                 />
                 <span class="text-input__validator"></span>
