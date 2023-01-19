@@ -1,5 +1,4 @@
 export default {
-    mode: 'development',
     // Target: https://go.nuxtjs.dev/config-target
     target: "static",
 
@@ -72,8 +71,8 @@ export default {
                         },
                         ssr: false, // default
                     },
-                    firestore: true,
-                    storage: true,
+                    firestore: false,
+                    storage: false,
                 },
             },
         ],

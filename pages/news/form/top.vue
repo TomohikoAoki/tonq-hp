@@ -24,31 +24,12 @@
 </template>
 
 <script>
+const axios = require("axios");
+
 export default {
   data() {
     return {
-      contents: [
-        {
-          'id': 1,
-          'title': 'テスト',
-          'date': '2023-01-12'
-        },
-        {
-          'id': 2,
-          'title': 'テスト',
-          'date': '2023-01-12'
-        },
-        {
-          'id': 3,
-          'title': 'テスト',
-          'date': '2023-01-12'
-        },
-        {
-          'id': 4,
-          'title': 'テスト',
-          'date': '2023-01-12'
-        }
-      ]
+      contents: ""
     }
   },
   layout() {
@@ -59,8 +40,15 @@ export default {
       console.log(id)
     },
     async fetchNews() {
+      const response = await axios.get('http://localhost/public/api/news/articles')
 
+      if(response.status === 200) {
+        this.contents = response.data
+      }
     }
+  },
+  mounted(){
+    this.fetchNews()
   }
 }
 </script>

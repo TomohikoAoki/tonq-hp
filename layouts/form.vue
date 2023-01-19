@@ -10,7 +10,7 @@
 
   <script>
 export default {
-  middleware: 'AuthMiddleware',
+  //middleware: 'AuthMiddleware',
   head() {
     return {
       title:'フォーム',

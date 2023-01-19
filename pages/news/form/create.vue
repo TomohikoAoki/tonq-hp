@@ -1,19 +1,24 @@
 <template>
   <div>
-    <FormFormatVue></FormFormatVue>
+    <FormTemplateVue @sendData="sendData"></FormTemplateVue>
   </div>
 </template>
 
 <script>
-import FormFormatVue from "../../../components/form/Format.vue";
+import FormTemplateVue from "../../../components/form/FormTemplate.vue";
 
 export default {
   components: {
-    FormFormatVue,
+    FormTemplateVue,
   },
   layout() {
     return "form";
   },
+  methods: {
+    async sendData(formData) {
+      await this.$store.dispatch('createArticle', formData)
+    }
+  }
 }
 </script>
 

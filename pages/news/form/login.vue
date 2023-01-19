@@ -99,6 +99,9 @@ export default {
         this.formData.email,
         this.formData.password
       );
+      return true;
+
+
     },
     redirectTop() {
       this.$router.push("/news/form/top");
