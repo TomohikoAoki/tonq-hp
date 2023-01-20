@@ -11,7 +11,9 @@ const axios = require("axios");
 export default {
   data() {
     return {
-      article: null
+      mode: 'edit',
+      article: null,
+      articleId:null,
     }
   },
   components: {
@@ -29,13 +31,16 @@ export default {
       }
     },
     sendData(formData) {
-      this.$store.dispatch('editArticle', formData)
+      formData.mode = this.mode
+      formData.formData.id = this.articleId
+      this.$store.dispatch('sendArticle', formData)
     }
 
   },
   mounted() {
     const id = this.$route.query.id
     this.fetchArticle(id)
+    this.articleId = id
   }
 }
 </script>

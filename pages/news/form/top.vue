@@ -36,8 +36,15 @@ export default {
     return 'form'
   },
   methods: {
-    pushDelete(id) {
-      console.log(id)
+    async pushDelete(id) {
+      if(window.confirm('delete OK?')) {
+        await this.$store.dispatch('deleteArticle', id)
+        location.reload();
+        return false
+      }
+
+      return false
+
     },
     async fetchNews() {
       const response = await axios.get('http://localhost/public/api/news/articles')

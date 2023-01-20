@@ -19,7 +19,7 @@
                   v-model="formData.title"
                   type="text"
                   class="text-input__body"
-                  :class="{ good: passed }"
+                  :class="{ good: passed, bad:!!errors[0] }"
                   placeholder="タイトル"
                 />
                 <span class="text-input__validator"></span>
@@ -119,14 +119,6 @@
         </button>
       </form>
     </ValidationObserver>
-    <ul>
-      <li>title:{{ formData.title }}</li>
-      <li>public:{{ formData.public }}</li>
-      <li>shopId:{{ formData.shop_ids }}</li>
-      <li>content:{{ formData.content }}</li>
-      <li>imageFile:{{ imageFile }}</li>
-      <li>preview:{{ preview }}</li>
-    </ul>
   </div>
 </template>
 
@@ -155,9 +147,11 @@ export default {
       return this.formData.shop_ids.includes(id);
     },
     confirm() {
+      $nuxt.$loading.start()
+
       let imageFormData = null;
 
-      if (this.imageFile && this.imageFile.includes('data:image/')) {
+      if (this.imageFile) {
         imageFormData = new FormData();
         imageFormData.append("thumb_nail", this.imageFile);
       }

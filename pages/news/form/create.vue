@@ -8,6 +8,11 @@
 import FormTemplateVue from "../../../components/form/FormTemplate.vue";
 
 export default {
+  data() {
+    return {
+      mode: 'create',
+    }
+  },
   components: {
     FormTemplateVue,
   },
@@ -16,7 +21,8 @@ export default {
   },
   methods: {
     async sendData(formData) {
-      await this.$store.dispatch('createArticle', formData)
+      formData.mode = this.mode
+      await this.$store.dispatch('sendArticle', formData)
     }
   }
 }

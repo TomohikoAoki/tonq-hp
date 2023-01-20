@@ -1,5 +1,6 @@
 <template>
     <div>
+      <Loading></Loading>
       <LayoutPartsFormHeader></LayoutPartsFormHeader>
       <main>
         <Nuxt />
@@ -9,7 +10,14 @@
   </template>
 
   <script>
+
+  import Loading from '../components/Loading.vue'
+
+
 export default {
+  components: {
+    Loading
+  },
   //middleware: 'AuthMiddleware',
   head() {
     return {

@@ -18,6 +18,7 @@ const mutations = {
 };
 
 const actions = {
+    //firebase ユーザーの変化があれば動く
     async onAuthStateChangedAction({ commit }, { authUser, claims }) {
         if (!authUser) {
             commit("SET_USER", null);
@@ -38,81 +39,83 @@ const actions = {
             commit("SET_HEADER", token);
         }
     },
-    async createArticle({ state }, data) {
-        if (data.imageData) {
-            axios
-                .post(`${process.env.API_NEWS_BASE_URL}/image-upload`, data.imageData, {
-                    headers: {
-                        Authorization: `Bearer ${state.user.token}`,
-                        "Content-Type": "multipart/form",
-                    },
-                    withCredentials: true,
-                })
-                .then((res) => {
-                    console.log(
-                        "画像アップロード完了,フォームデータのアップロードに移ります",
-                        res.data
-                    );
-                    return res;
-                })
-                .then((res) => {
-                    data.formData.public = data.formData.public ? 1 : 0;
-                    data.formData["thumb_filename"] = res.data;
-                    return axios.post(
-                        `${process.env.API_NEWS_BASE_URL}/article/create`,
-                        data.formData, {
-                            headers: {
-                                Authorization: `Bearer ${state.user.token}`,
-                                "Content-Type": "application/json",
-                            },
+    //ニュース記事送信 作成＆編集
+    async sendArticle({ state }, data) {
+        const AuthHeader = `Bearer ${state.user.token}`;
+        const postImageUrl = `${process.env.API_NEWS_BASE_URL}/image-upload`;
+        const baseFormUrl = `${process.env.API_NEWS_BASE_URL}/article`;
 
-                            withCredentials: true,
-                        }
-                    );
-                }).then((res) => {
-                    console.log('全部うまく行ったはず', res)
-                })
-                .catch((res) => {
-                    console.log("画像アップロード失敗", res);
-                });
-            return false;
+
+        //サムネイル画像があれば先にアップロード,fileName取得
+        if (data.imageData) {
+            const resImage = await axios.post(postImageUrl, data.imageData, {
+                headers: {
+                    Authorization: AuthHeader,
+                    "Content-Type": "multipart/form",
+                },
+                withCredentials: true,
+            });
+
+            if (resImage.status !== 200) {
+                console.log(resImage.error)
+                $nuxt.$loading.finish()
+                return false
+            }
+            console.log(
+                "画像アップロード完了,フォームデータのアップロードに移ります",
+                resImage.data
+            );
+            data.formData["thumb_filename"] = resImage.data;
         }
 
         data.formData.public = data.formData.public ? 1 : 0;
-        axios
-            .post(`${process.env.API_NEWS_BASE_URL}/article/create`, data.formData, {
-                headers: {
-                    Authorization: `Bearer ${state.user.token}`,
-                    "Content-Type": "application/json",
-                },
 
-                withCredentials: true,
-            })
-            .then((res) => {
-                console.log("画像が無くてフォームアップロード成功", res);
-            })
-            .catch((error) => {
-                console.log("画像が無くて失敗", error);
-            });
-    },
-    async editArticle({ state }, data) {
-        const id = data.id;
-        const response = await axios.post(
-            `${process.env.API_NEWS_BASE_URL}/article/edit/${id}`,
-            data,
-            state.header
-        );
+        //データ送信
+        let sendUrl, axiosMethod
+        if (data.mode === "create") {
+            sendUrl = `${baseFormUrl}/create`
+            axiosMethod = 'POST'
+        } else {
+            sendUrl = `${baseFormUrl}/edit/${data.formData.id}`
+            axiosMethod = 'PUT'
+        }
 
-        console.log(response);
+        const resForm = await axios({
+            method: axiosMethod,
+            url: sendUrl,
+            data: data.formData,
+            headers: {
+                Authorization: AuthHeader,
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+        });
+
+        if (resForm.status === 200) {
+            $nuxt.$loading.finish()
+            console.log("すべて成功");
+
+        } else {
+            $nuxt.$loading.finish()
+            console.log("失敗");
+        }
     },
+    //ニュース記事削除
     async deleteArticle({ state }, id) {
-        const response = await axios.delete(
-            `${process.env.API_NEWS_BASE_URL}/article/delete/${id}`,
-            id,
-            state.header
-        );
+        const response = await axios({
+            method: "delete",
+            url: `${process.env.API_NEWS_BASE_URL}/article/delete/${id}`,
+            headers: {
+                Authorization: `Bearer ${state.user.token}`,
+                "Content-Type": "application/json",
+            },
+        });
 
-        console.log(response);
+        if (response.status === 200) {
+            console.log('削除成功！')
+        } else {
+            console.log('削除失敗！')
+        }
     },
 };
 
