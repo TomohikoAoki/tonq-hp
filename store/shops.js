@@ -499,7 +499,8 @@ const state = () => ({
 const getters = {
     getShopData: (state) => (id) => {
         return state.shopData.find((item) => item.id === id)
-    }
+    },
+    getShop: (state) => state.shopData
 };
 
 export default {
