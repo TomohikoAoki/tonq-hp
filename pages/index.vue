@@ -15,19 +15,24 @@
       </div>
     </div>
     <div class="menu-and-shop">
-      <div class="menu">
-        とんＱのお品書き
-      </div>
-      <div class="shops">
-        店舗紹介
-      </div>
+      <div class="menu">とんＱのお品書き</div>
+      <div class="shops">店舗紹介</div>
     </div>
     <div class="news">
-      <p>news</p>
-      <div class="topic">
-        <div class="topic-image"></div>
-        <div class="topic-date"></div>
-        <div class="topic-title"></div>
+      <p class="news-title">news</p>
+      <div class="topic-area">
+        <nuxt-link
+          :to="{ path: '/news/_article', query: { id: news.id } }"
+          class="topic"
+          v-for="(news, index) in currentNews"
+          :key="index"
+        >
+          <div class="topic-image">
+            <img :src="generateImageUrl(news.thumb_filename)" />
+          </div>
+          <div class="topic-date">{{ generateDate(news.created_at) }}</div>
+          <div class="topic-title">{{ news.title }}</div>
+        </nuxt-link>
       </div>
     </div>
     <div class="link-area"></div>
@@ -35,21 +40,41 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "IndexPage",
   layout() {
     return "MainLayouts";
   },
+  data() {
+    return {
+      currentNews: null,
+    };
+  },
   methods: {
     async fetchNews() {
-      const response = await this.$axios.get("http://localhost/public/news")
+      const response = await axios.get(
+        `${process.env.API_NEWS_BASE_URL}/posts/current`
+      );
 
-      console.log(response.data)
-    }
+      if (response.status === 200) {
+        this.currentNews = response.data;
+      }
+    },
+    generateDate(date) {
+      return date.substr(0, 10);
+    },
+    generateImageUrl(filename) {
+      if (filename) {
+        return `${process.env.API_NEWS_BASE_URL}/cache/uploads/${filename}`;
+      }
+      return require("@/assets/image/news/thumb-default.gif");
+    },
   },
   mounted() {
-    this.fetchNews()
-  }
+    this.fetchNews();
+  },
 };
 </script>
 
@@ -75,5 +100,37 @@ export default {
 .menu {
   height: 40vh;
   background-color: rgb(235, 229, 221);
+}
+
+.news {
+  .news-title {
+    text-align: center;
+    font-weight: bold;
+    padding: 1em 0;
+    font-size: 2em;
+  }
+  .topic-area {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1366px;
+    margin: 0 auto;
+    .topic {
+      width: 32%;
+      border: 1px solid;
+      padding: 20px;
+      .topic-title {
+        font-weight: bold;
+      }
+      .topic-date {
+        font-weight: bold;
+      }
+      .topic-image {
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
 }
 </style>

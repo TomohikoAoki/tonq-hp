@@ -3,6 +3,7 @@
     <NewsHeader></NewsHeader>
     <div class="news-contents-area">
       <div class="news-side-column column-left">
+        <Loading ref="loading"></Loading>
         <div v-if="article" class="article">
           <div class="article-header">
             <h2 class="article-title">{{ article.title }}</h2>
@@ -25,11 +26,13 @@
 import axios from "axios";
 import Categories from "../../components/news/Categories.vue"
 import NewsHeader from "../../components/news/Header.vue"
+import Loading from "../../components/LoadingArticle.vue"
 
 export default {
   components: {
     Categories,
-    NewsHeader
+    NewsHeader,
+    Loading
   },
   data() {
     return {
@@ -38,13 +41,14 @@ export default {
   },
   methods: {
     async fetchArticle(id) {
+      this.$refs.loading.start()
       const response = await axios.get(
         `${process.env.API_NEWS_BASE_URL}/articles/${id}`
       );
 
       if (response.status === 200) {
+        this.$refs.loading.finish()
         this.article = response.data;
-        console.log(response.data.content);
       }
     },
     generateDate(date) {
@@ -63,6 +67,7 @@ export default {
 .news-contents-area {
   display: flex;
   max-width: 1360px;
+  width: 95%;
   margin: 0 auto;
   .column-left {
     width: 70%;
@@ -92,7 +97,6 @@ export default {
   padding: 20px;
   :deep(strong) {
     font-weight: bold;
-    color: brown;
   }
   :deep(em) {
     font-style: italic;
