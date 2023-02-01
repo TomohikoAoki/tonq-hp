@@ -35,6 +35,7 @@ export default {
         "@/plugins/vee-validate",
         { src: "~/plugins/axios.js", mode: "client" },
         { src: "@/plugins/quill", mode: "client" },
+        '@/plugins/utils',
     ],
     axios: {},
 

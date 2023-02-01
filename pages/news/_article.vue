@@ -4,15 +4,16 @@
     <div class="news-contents-area">
       <div class="news-side-column column-left">
         <Loading ref="loading"></Loading>
-        <div v-if="article" class="article">
+        <div v-if="postData" class="article">
           <div class="article-header">
-            <h2 class="article-title">{{ article.title }}</h2>
+            <h2 class="article-title">{{ postData.title }}</h2>
             <div class="article-date">
-              {{ generateDate(article.created_at) }}
+              {{ $generateDate(postData.created_at) }}
             </div>
           </div>
-          <div class="article-content" v-html="article.content"></div>
+          <div class="article-content" v-html="postData.content"></div>
         </div>
+        <div v-else-if="errorMessage">{{ errorMessage }}</div>
         <div class="news-side-column"></div>
       </div>
       <div class="news-side-column column-right">
@@ -23,10 +24,11 @@
 </template>
 
 <script>
-import axios from "axios";
 import Categories from "../../components/news/Categories.vue"
 import NewsHeader from "../../components/news/Header.vue"
 import Loading from "../../components/LoadingArticle.vue"
+
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -34,25 +36,17 @@ export default {
     NewsHeader,
     Loading
   },
-  data() {
-    return {
-      article: null,
-    };
+  computed: {
+    ...mapGetters({
+      postData: 'getPostData',
+      errorMessage: 'getErrorMessage',
+    })
   },
   methods: {
     async fetchArticle(id) {
       this.$refs.loading.start()
-      const response = await axios.get(
-        `${process.env.API_NEWS_BASE_URL}/articles/${id}`
-      );
-
-      if (response.status === 200) {
-        this.$refs.loading.finish()
-        this.article = response.data;
-      }
-    },
-    generateDate(date) {
-      return date.substr(0, 10);
+      await this.$store.dispatch('fetchPost', id)
+      this.$refs.loading.finish()
     },
   },
   mounted() {

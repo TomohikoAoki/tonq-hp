@@ -17,13 +17,11 @@ export default {
   props: ['paginate'],
   methods: {
     paging(n) {
-      console.log('paging', n)
       this.$emit('paging', n)
     }
   },
   computed: {
     generateIcon() {
-      console.log(this.paginate)
       return Math.ceil(this.paginate.count / this.paginate.limit);
     },
   },

@@ -292,8 +292,9 @@
               type="submit"
               class="btn button02"
               :class="{ disable: ObserverProps.invalid }"
-              :disabled="ObserverProps.invalid || !ObserverProps.validated"
+
             >
+            <!--:disabled="ObserverProps.invalid || !ObserverProps.validated"-->
               確認
             </button>
           </form>
@@ -319,7 +320,6 @@
 import { mapState } from "vuex";
 
 const axios = require("axios");
-const url = process.env.API_BASE_URL;
 
 export default {
   data() {
@@ -375,51 +375,49 @@ export default {
         this.formData[key] = this.formData[key].trim().replace(/( |　)/g, "");
       });
       await axios
-        .post(`${url}/api/send-mail.php`, this.formData, {
-          withCredentials: true,
-        })
-        .then((rps) => {
-          console.log(rps);
-          this.$nuxt.$loading.finish();
-          this.confirmFlag = true;
-          this.confirmData = rps.data;
-        })
-        .catch((error) => {
-          this.$nuxt.$loading.finish();
-          if (error.response.status === 422) {
-            this.$refs.obs.setErrors(error.response.data);
-            return;
-          }
-          this.$store.dispatch("error/catchError", error.response);
-        });
+        .post(`${process.env.API_NEWS_BASE_URL}/mailer`, this.formData)
+        //.then((rps) => {
+        //  console.log(rps);
+        //  this.$nuxt.$loading.finish();
+        //  this.confirmFlag = true;
+        //  this.confirmData = rps.data;
+        //})
+        //.catch((error) => {
+        //  this.$nuxt.$loading.finish();
+        //  if (error.response.status === 422) {
+        //    this.$refs.obs.setErrors(error.response.data);
+        //    return;
+        //  }
+        //  this.$store.dispatch("error/catchError", error.response);
+        //});
     },
 
     //初回訪問時　トークン発行
-    async fetchCookie() {
-      await axios({
-        method: "GET",
-        url: `${url}/api/send-mail.php`,
-        auth: { username: "tonqapi", password: "tonqapi" },
-        withCredentials: true,
-      })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          return false;
-        });
-    },
+    //async fetchCookie() {
+    //  await axios({
+    //    method: "GET",
+    //    url: `${url}/api/send-mail.php`,
+    //    auth: { username: "tonqapi", password: "tonqapi" },
+    //    withCredentials: true,
+    //  })
+    //    .then((response) => {
+    //      console.log(response);
+    //    })
+    //    .catch((error) => {
+    //      return false;
+    //    });
+    //},
     //メール送信完了　サンクス画面表示
-    success(response) {
-      this.message = response.data;
-      Object.keys(this.formData).forEach((key) => {
-        this.formData[key] = "";
-      });
-      this.confirmFlag = false;
-      this.showForm = false;
+    //success(response) {
+    //  this.message = response.data;
+    //  Object.keys(this.formData).forEach((key) => {
+    //    this.formData[key] = "";
+    //  });
+    //  this.confirmFlag = false;
+    //  this.showForm = false;
 
-      window.scrollTo({ top: 0 });
-    },
+    //  window.scrollTo({ top: 0 });
+    //},
     //mount時　初期化
     init() {
       this.confirmFlag = false;
@@ -433,7 +431,7 @@ export default {
   },
   mounted() {
     this.init();
-    this.fetchCookie();
+    //this.fetchCookie();
   },
 };
 </script>

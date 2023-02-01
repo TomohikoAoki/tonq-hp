@@ -3,6 +3,9 @@ const axios = require("axios");
 const state = () => ({
     user: null,
     header: null,
+    successFlag: false,
+    postData: null,
+    errorMessage: null,
 });
 
 const mutations = {
@@ -14,6 +17,19 @@ const mutations = {
             Authorization: `Bearer ${token}`,
             "Context-type": "application/json",
         };
+    },
+    SET_SUCCESS_FLAG(state) {
+        state.successFlag = !state.successFlag;
+    },
+    SET_POST_DATA(state, data) {
+        state.postData = data;
+    },
+    CLEAR_POST_DATA(state) {
+        state.postData = null;
+        state.errorMessage = null
+    },
+    SET_ERROR_MESSAGE(state, message) {
+        state.errorMessage = message;
     },
 };
 
@@ -39,69 +55,114 @@ const actions = {
             commit("SET_HEADER", token);
         }
     },
+    //ニュース一覧取得
+    async fetchNews({ commit }, page = 1) {
+        let response = null;
+        try {
+            response = await axios.get(
+                `${process.env.API_NEWS_BASE_URL}/posts/${page}`
+            );
+        } catch (err) {
+            commit('SET_ERROR_MESSAGE', err.response.data)
+        }
+
+        let data = {
+            news_data: response.data.news_data,
+            paginate: {
+                page: response.data.page,
+                limit: response.data.limit,
+                count: response.data.count,
+            },
+        };
+
+        commit("SET_POST_DATA", data);
+    },
+    //ニュース１記事取得
+    async fetchPost({ commit }, id) {
+        let response = null;
+        try {
+            response = await axios.get(
+                `${process.env.API_NEWS_BASE_URL}/articles/${id}`
+            );
+        } catch (err) {
+            commit('SET_ERROR_MESSAGE', err.response.data)
+        }
+        commit("SET_POST_DATA", response.data);
+    },
+    //postData初期化
+    clearPostData({ commit }) {
+        commit("CLEAR_POST_DATA");
+    },
+
     //ニュース記事送信 作成＆編集
-    async sendArticle({ state }, data) {
+    async sendArticle({ state, commit }, data) {
         const AuthHeader = `Bearer ${state.user.token}`;
         const postImageUrl = `${process.env.API_NEWS_BASE_URL}/image-upload`;
         const baseFormUrl = `${process.env.API_NEWS_BASE_URL}/article`;
 
-
         //サムネイル画像があれば先にアップロード,fileName取得
         if (data.imageData) {
-            const resImage = await axios.post(postImageUrl, data.imageData, {
-                headers: {
-                    Authorization: AuthHeader,
-                    "Content-Type": "multipart/form",
-                },
-                withCredentials: true,
-            });
+            let resImage = null;
+            try {
+                resImage = await axios.post(postImageUrl, data.imageData, {
+                    headers: {
+                        Authorization: AuthHeader,
+                        "Content-Type": "multipart/form",
+                    },
+                    withCredentials: true,
+                });
+            } catch (err) {
+                $nuxt.$loading.finish();
+                if (err.response.status === 422) {
+                    console.log("画像アップロード失敗", err.response.data);
+                }
 
-            if (resImage.status !== 200) {
-                console.log(resImage.error)
-                $nuxt.$loading.finish()
-                return false
+                return false;
             }
-            console.log(
-                "画像アップロード完了,フォームデータのアップロードに移ります",
-                resImage.data
-            );
+
             data.formData["thumb_filename"] = resImage.data;
         }
 
         data.formData.public = data.formData.public ? 1 : 0;
 
         //データ送信
-        let sendUrl, axiosMethod
+        let sendUrl, axiosMethod;
         if (data.mode === "create") {
-            sendUrl = `${baseFormUrl}/create`
-            axiosMethod = 'POST'
+            sendUrl = `${baseFormUrl}/create`;
+            axiosMethod = "POST";
         } else {
-            sendUrl = `${baseFormUrl}/edit/${data.formData.id}`
-            axiosMethod = 'PUT'
+            sendUrl = `${baseFormUrl}/edit/${data.formData.id}`;
+            axiosMethod = "PUT";
         }
 
-        const resForm = await axios({
-            method: axiosMethod,
-            url: sendUrl,
-            data: data.formData,
-            headers: {
-                Authorization: AuthHeader,
-                "Content-Type": "application/json",
-            },
-            withCredentials: true,
-        });
+        let resForm = null;
+        try {
+            resForm = await axios({
+                method: axiosMethod,
+                url: sendUrl,
+                data: data.formData,
+                headers: {
+                    Authorization: AuthHeader,
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            });
+        } catch (err) {
+            $nuxt.$loading.finish();
+            if (err.response.status === 422) {
+                //画像削除の処理が入れれたらgood!
+                console.log("フォームアップロード失敗", err.response.data);
+            }
 
-        if (resForm.status === 200) {
-            $nuxt.$loading.finish()
-            console.log("すべて成功");
-
-        } else {
-            $nuxt.$loading.finish()
-            console.log("失敗");
+            return false;
         }
+
+        $nuxt.$loading.finish();
+        commit("SET_SUCCESS_FLAG", true);
+        console.log("すべて成功");
     },
     //ニュース記事削除
-    async deleteArticle({ state }, id) {
+    async deleteArticle({ state, commit }, id) {
         const response = await axios({
             method: "delete",
             url: `${process.env.API_NEWS_BASE_URL}/article/delete/${id}`,
@@ -112,16 +173,25 @@ const actions = {
         });
 
         if (response.status === 200) {
-            console.log('削除成功！')
+            $nuxt.$loading.finish();
+            commit("SET_SUCCESS_FLAG", true);
+            console.log("削除成功！");
         } else {
-            console.log('削除失敗！')
+            $nuxt.$loading.finish();
+            console.log("削除失敗！");
         }
+    },
+    changeSuccessFlag(context) {
+        context.commit("SET_SUCCESS_FLAG");
     },
 };
 
 const getters = {
     getUser: (state) => state.user,
     isLogin: (state) => !!state.user,
+    getSuccessFlag: (state) => state.successFlag,
+    getPostData: (state) => state.postData,
+    getErrorMessage: (state) => state.errorMessage
 };
 
 export default {

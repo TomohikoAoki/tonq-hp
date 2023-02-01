@@ -1,11 +1,13 @@
 <template>
-  <div>
+  <div class="form">
+    <Confirm>Create Complete!</Confirm>
     <FormTemplateVue @sendData="sendData"></FormTemplateVue>
   </div>
 </template>
 
 <script>
 import FormTemplateVue from "../../../components/form/FormTemplate.vue";
+import Confirm from '../../../components/Confirm.vue'
 
 export default {
   data() {
@@ -15,6 +17,7 @@ export default {
   },
   components: {
     FormTemplateVue,
+    Confirm
   },
   layout() {
     return "form";
@@ -29,4 +32,5 @@ export default {
 </script>
 
 <style lang="scss">
+
 </style>

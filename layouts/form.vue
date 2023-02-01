@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="layout-form">
       <Loading></Loading>
       <LayoutPartsFormHeader></LayoutPartsFormHeader>
       <main>
@@ -29,3 +29,9 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.layout-form {
+  position: relative;
+}
+</style>
