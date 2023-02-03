@@ -292,9 +292,8 @@
               type="submit"
               class="btn button02"
               :class="{ disable: ObserverProps.invalid }"
-
             >
-            <!--:disabled="ObserverProps.invalid || !ObserverProps.validated"-->
+              <!--:disabled="ObserverProps.invalid || !ObserverProps.validated"-->
               確認
             </button>
           </form>
@@ -369,55 +368,66 @@ export default {
     //post送信　確認画面表示
     async confirm() {
       this.$nuxt.$loading.start();
-      this.formData.mode = "confirm";
       //空白削除
       Object.keys(this.formData).forEach((key) => {
         this.formData[key] = this.formData[key].trim().replace(/( |　)/g, "");
       });
-      await axios
-        .post(`${process.env.API_NEWS_BASE_URL}/mailer`, this.formData)
-        //.then((rps) => {
-        //  console.log(rps);
-        //  this.$nuxt.$loading.finish();
-        //  this.confirmFlag = true;
-        //  this.confirmData = rps.data;
-        //})
-        //.catch((error) => {
-        //  this.$nuxt.$loading.finish();
-        //  if (error.response.status === 422) {
-        //    this.$refs.obs.setErrors(error.response.data);
-        //    return;
-        //  }
-        //  this.$store.dispatch("error/catchError", error.response);
-        //});
+
+      let response = null;
+
+      try {
+        response = await axios.post(
+          `${process.env.API_NEWS_BASE_URL}/mail/check`,
+          this.formData,{
+            withCredentials: true,
+          }
+        );
+      } catch (err) {
+        this.$nuxt.$loading.finish();
+        if (error.response.status === 422) {
+          this.$refs.obs.setErrors(error.response.data);
+          return;
+        }
+        this.$store.dispatch("error/catchError", error.response);
+      }
+      this.$nuxt.$loading.finish();
+      this.formData['csrf_name'] = response.data.token['csrf_name']
+      this.formData['csrf_value'] = response.data.token['csrf_value']
+      this.confirmData = response.data
+      this.confirmFlag = true
     },
 
     //初回訪問時　トークン発行
-    //async fetchCookie() {
-    //  await axios({
-    //    method: "GET",
-    //    url: `${url}/api/send-mail.php`,
-    //    auth: { username: "tonqapi", password: "tonqapi" },
-    //    withCredentials: true,
-    //  })
-    //    .then((response) => {
-    //      console.log(response);
-    //    })
-    //    .catch((error) => {
-    //      return false;
-    //    });
-    //},
-    //メール送信完了　サンクス画面表示
-    //success(response) {
-    //  this.message = response.data;
-    //  Object.keys(this.formData).forEach((key) => {
-    //    this.formData[key] = "";
-    //  });
-    //  this.confirmFlag = false;
-    //  this.showForm = false;
+    async fetchToken() {
+      let response = null;
+      try {
+        response = await axios({
+          method: "GET",
+          url: `${process.env.API_NEWS_BASE_URL}/mail/token`,
+          headers: {
+            Authorization: "",
+          },
+          withCredentials: true,
+        });
+      } catch (err) {
+        console.log(err.response);
+      }
 
-    //  window.scrollTo({ top: 0 });
-    //},
+      this.formData['csrf_name'] = response.data['csrf_name']
+      this.formData['csrf_value'] = response.data['csrf_value']
+
+    },
+    //メール送信完了　サンクス画面表示
+    success(response) {
+      this.message = response.data;
+      Object.keys(this.formData).forEach((key) => {
+        this.formData[key] = "";
+      });
+      this.confirmFlag = false;
+      this.showForm = false;
+
+      window.scrollTo({ top: 0 });
+    },
     //mount時　初期化
     init() {
       this.confirmFlag = false;
@@ -431,7 +441,7 @@ export default {
   },
   mounted() {
     this.init();
-    //this.fetchCookie();
+    this.fetchToken();
   },
 };
 </script>

@@ -4,7 +4,7 @@
       <div class="confirm-title">内容確認<span>confirm</span></div>
       <dl class="data-area">
         <div
-          v-for="(value, key) in confirmData"
+          v-for="(value, key) in confirmData.body"
           :key="key"
           class="confirm-data-group"
         >
@@ -41,23 +41,15 @@ const axios = require("axios");
 export default {
   data() {
     return {
-      testData: {
-        name: "青木 智彦",
-        email: "aoki@ton-q.com",
-        phoneNumber: "09024270056",
-        gender: "男性",
-        zipCode: "3050045",
-        address: "茨城県つくば市梅園2-17-4",
-        shop: "つくば本店",
-        content: "テストデータの内容です。送信してもメールは送れません。",
-      },
       labels: {
-        name: "名前",
+        lastName: "氏名",
+        firstName: "名前",
         email: "メールアドレス",
         phoneNumber: "電話番号",
         gender: "性別",
         zipCode: "郵便番号",
-        address: "住所",
+        addI: "住所1",
+        addII:"住所１以下",
         shop: "店舗",
         content: "お問い合わせ内容",
       },
@@ -72,8 +64,11 @@ export default {
       this.$nuxt.$loading.start();
       await axios
         .post(
-          `${process.env.API_BASE_URL}/api/send-mail.php`,
-          { mode: "send" },
+          `${process.env.API_NEWS_BASE_URL}/mail/send`,
+          {
+            csrf_name: this.confirmData.token["csrf_name"],
+            csrf_value: this.confirmData.token["csrf_value"],
+          },
           { withCredentials: true }
         )
         .then((response) => {

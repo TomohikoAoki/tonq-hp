@@ -97,7 +97,7 @@ const actions = {
     //ニュース記事送信 作成＆編集
     async sendArticle({ state, commit }, data) {
         const AuthHeader = `Bearer ${state.user.token}`;
-        const postImageUrl = `${process.env.API_NEWS_BASE_URL}/image-upload`;
+        const postImageUrl = `${process.env.API_NEWS_BASE_URL}/article/image-upload`;
         const baseFormUrl = `${process.env.API_NEWS_BASE_URL}/article`;
 
         //サムネイル画像があれば先にアップロード,fileName取得
