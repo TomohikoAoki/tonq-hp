@@ -307,8 +307,20 @@
       ></contactConfirmModal>
     </div>
     <div class="thanks" v-else>
-      <div class="test">
-        <span v-html="message"></span>
+      <div class="thanks-content">
+        <p class="thanks-content__title">
+          お問い合わせ<span class="sp_block">ありがとうございました。</span>
+        </p>
+        <p class="thanks-content__text">入力内容を送信いたしました。<br></p>
+        <p class="thanks-content__text">
+          当社からの返信はできるかぎり迅速に送らせていただきます。<br />１週間経っても返信が無い場合は恐れ入りますが、お電話番号を明記の上、再度お問い合わせいただくか、または下記電話番号までご連絡ください。
+        </p>
+        <p class="thanks-content__text">
+          TEL：029-852-1085<span class="sp-none">／</span
+          ><span class="sp_block">FAX：029-852-1094</span> E-mail：<span
+            class="sp_block"
+            ><a href="mailto:honbu@ton-q.com">honbu@ton-q.com</a></span
+          ></p>
       </div>
       <nuxt-link to="/" class="btn home">ホームに戻る</nuxt-link>
     </div>
@@ -326,7 +338,6 @@ export default {
       confirmFlag: false,
       confirmData: "",
       showForm: true,
-      message: "",
       formData: {
         lastName: "",
         firstName: "",
@@ -378,7 +389,8 @@ export default {
       try {
         response = await axios.post(
           `${process.env.API_NEWS_BASE_URL}/mail/check`,
-          this.formData,{
+          this.formData,
+          {
             withCredentials: true,
           }
         );
@@ -391,10 +403,10 @@ export default {
         this.$store.dispatch("error/catchError", error.response);
       }
       this.$nuxt.$loading.finish();
-      this.formData['csrf_name'] = response.data.token['csrf_name']
-      this.formData['csrf_value'] = response.data.token['csrf_value']
-      this.confirmData = response.data
-      this.confirmFlag = true
+      this.formData["csrf_name"] = response.data.token["csrf_name"];
+      this.formData["csrf_value"] = response.data.token["csrf_value"];
+      this.confirmData = response.data;
+      this.confirmFlag = true;
     },
 
     //初回訪問時　トークン発行
@@ -413,13 +425,11 @@ export default {
         console.log(err.response);
       }
 
-      this.formData['csrf_name'] = response.data['csrf_name']
-      this.formData['csrf_value'] = response.data['csrf_value']
-
+      this.formData["csrf_name"] = response.data["csrf_name"];
+      this.formData["csrf_value"] = response.data["csrf_value"];
     },
     //メール送信完了　サンクス画面表示
     success(response) {
-      this.message = response.data;
       Object.keys(this.formData).forEach((key) => {
         this.formData[key] = "";
       });
@@ -436,7 +446,6 @@ export default {
         this.formData[key] = "";
       });
       this.showForm = true;
-      this.message = "";
     },
   },
   mounted() {
@@ -667,12 +676,18 @@ export default {
 .thanks {
   padding: 50px 0;
   min-height: 70vh;
-  .test {
+  .thanks-content {
     width: 90%;
+    max-width: 800px;
     margin: 0 auto;
-    & :deep(.v-html-create) {
-      text-align: center;
-      line-height: 1.6em;
+    .thanks-content__title {
+      font-size: 1.3em;
+      font-weight: bold;
+      padding: 1em 0 2em 0;
+    }
+    .thanks-content__text {
+      line-height: 1.7em;
+      padding: 0.5em 0;
     }
   }
   .btn.home {

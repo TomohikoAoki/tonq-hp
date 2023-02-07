@@ -18,7 +18,7 @@ export default {
   components: {
     Loading
   },
-  //middleware: 'AuthMiddleware',
+  middleware: 'AuthMiddleware',
   head() {
     return {
       title:'フォーム',
