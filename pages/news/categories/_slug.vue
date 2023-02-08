@@ -3,7 +3,9 @@
     <NewsHeader></NewsHeader>
     <div class="news-contents-area">
       <div class="news-side-column column-left">
-        <h2 class="news-list__title">ニュース一覧</h2>
+        <h2 class="news-list__title">
+          {{ $generateShopLabels(shopLabels, shopId, "name") }}のニュース一覧
+        </h2>
         <Loading ref="loading"></Loading>
         <div v-if="postData">
           <ul class="news-area">
@@ -38,18 +40,19 @@
 </template>
 
 <script>
-import Categories from "../../components/news/Categories.vue";
-import NewsHeader from "../../components/news/Header.vue";
-import Loading from "../../components/LoadingArticle.vue";
-import Pagination from "../../components/news/Pagination2.vue";
+import Categories from "../../../components/news/Categories.vue";
+import NewsHeader from "../../../components/news/Header.vue";
+import Loading from "../../../components/LoadingArticle.vue";
+import Pagination from "../../../components/news/Pagination2.vue";
 
 import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
+      shopId: null,
       page: 1,
-    }
+    };
   },
   components: {
     Categories,
@@ -61,34 +64,35 @@ export default {
     ...mapGetters({
       postData: "getPostData",
       errorMessage: "getErrorMessage",
-      shopLabels: "shops/getShopLabels"
+      shopLabels: "shops/getShopLabels",
     }),
   },
   methods: {
-    async fetchNews(page = null) {
+    async fetchNewsByShop(shopId, page) {
       this.$refs.loading.start();
-      await this.$store.dispatch("fetchNews", page);
+      await this.$store.dispatch("fetchNewsByShop", {
+        shopId: shopId,
+        page: page,
+      });
       this.$refs.loading.finish();
     },
     fetchPage(n) {
-      this.page = Number(n)
-      this.$router.push({ query: { page: this.page } });
+      this.page = Number(n);
       window.scrollTo({
         top: 0,
       });
+      this.fetchNewsByShop(this.shopId, this.page);
     },
     toDetail(id) {
       this.$router.push(`/news/${id}`);
     },
   },
   mounted() {
-    this.fetchNews();
+    let slug = this.$route.params.slug;
+    let result = this.shopLabels.find((item) => item.slug === slug);
+    this.shopId = result.id;
+    this.fetchNewsByShop(this.shopId, this.page);
   },
-  beforeRouteUpdate(to, from, next) {
-    this.page = (to.query.page) ? Number(to.query.page)  : 1
-    this.fetchNews(this.page)
-    next()
-  }
 };
 </script>
 

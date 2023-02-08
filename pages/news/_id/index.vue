@@ -24,9 +24,9 @@
 </template>
 
 <script>
-import Categories from "../../components/news/Categories.vue"
-import NewsHeader from "../../components/news/Header.vue"
-import Loading from "../../components/LoadingArticle.vue"
+import Categories from "../../../components/news/Categories.vue"
+import NewsHeader from "../../../components/news/Header.vue"
+import Loading from "../../../components/LoadingArticle.vue"
 
 import { mapGetters } from "vuex";
 
@@ -50,7 +50,7 @@ export default {
     },
   },
   mounted() {
-    const id = this.$route.query.id;
+    const id = this.$route.params.id;
     this.fetchArticle(id);
   },
 };

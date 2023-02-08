@@ -5,9 +5,9 @@
       <p class="category-title__sub">店舗別</p>
       <ul class="category__list">
         <li v-for="(shop, index) in shops" :key="index" class="list-item">
-          <nuxt-link to="">
+          <div @click="toShopIndex(shop)">
           {{ shop.name.replace("とんかつとんＱ", "") }}
-        </nuxt-link>
+        </div>
         </li>
       </ul>
     </div>
@@ -23,6 +23,11 @@ export default {
       shops: "shops/getShop",
     }),
   },
+  methods: {
+    toShopIndex(shop) {
+      this.$router.push(`/news/categories/${shop.slug}`)
+    }
+  }
 };
 </script>
 

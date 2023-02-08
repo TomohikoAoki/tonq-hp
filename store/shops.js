@@ -2,6 +2,7 @@ const state = () => ({
     shopData: [{
             id: 1,
             name: "とんかつとんＱつくば本店",
+            slug: "tsukuba",
             url: "http://ton-q.com/shop/tsukuba.html",
             "@context": "http://schema.org",
             "@type": "Restaurant",
@@ -68,6 +69,7 @@ const state = () => ({
         {
             id: 2,
             name: "とんかつとんＱ水戸千波店",
+            slug: "senba",
             url: "http://ton-q.com/shop/senba.html",
             "@context": "http://schema.org",
             "@type": "Restaurant",
@@ -132,6 +134,7 @@ const state = () => ({
         {
             id: 3,
             name: "とんかつとんＱ守谷ふれあい店",
+            slug: "moriya",
             url: "http://ton-q.com/shop/moriya.html",
             "@context": "http://schema.org",
             "@type": "Restaurant",
@@ -196,6 +199,7 @@ const state = () => ({
         {
             id: 4,
             name: "とんかつとんＱ成田ニュータウン店",
+            slug: "narita",
             url: "http://ton-q.com/shop/narita.html",
             "@context": "http://schema.org",
             "@type": "Restaurant",
@@ -262,6 +266,7 @@ const state = () => ({
         {
             id: 5,
             name: "とんかつとんＱ春日部店",
+            slug: "kasukabe",
             url: "http://ton-q.com/shop/kasukabe.html",
             "@context": "http://schema.org",
             "@type": "Restaurant",
@@ -332,6 +337,7 @@ const state = () => ({
         {
             id: 6,
             name: "とんかつとんＱふじみ野店",
+            slug: "fujimino",
             url: "http://ton-q.com/shop/fujimino.html",
             "@context": "http://schema.org",
             "@type": "Restaurant",
@@ -402,6 +408,7 @@ const state = () => ({
         {
             id: 7,
             name: "とんかつとんＱイーアスつくば店",
+            slug: "iias",
             url: "http://ton-q.com/shop/iias.html",
             "@context": "http://schema.org",
             "@type": "Restaurant",
@@ -449,6 +456,7 @@ const state = () => ({
         {
             id: 8,
             name: "とんかつとんＱ柏髙島屋ステーションモール店",
+            slug: "kashiwa",
             url: "http://ton-q.com/shop/kashiwa.html",
             "@context": "http://schema.org",
             "@type": "Restaurant",
@@ -500,7 +508,16 @@ const getters = {
     getShopData: (state) => (id) => {
         return state.shopData.find((item) => item.id === id)
     },
-    getShop: (state) => state.shopData
+    getShop: (state) => state.shopData,
+    getShopLabels: (state) => {
+        let data = []
+        state.shopData.forEach((item) => {
+            let obj = { id: item.id, name: item.name, slug: item.slug }
+            data.push(obj)
+        })
+
+        return data
+    }
 };
 
 export default {

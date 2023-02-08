@@ -49,9 +49,9 @@
           :key="index"
         >
           <div class="topic-image">
-            <img :src="generateImageUrl(news.thumb_filename)" />
+            <img :src="$generateImageUrl(news.thumb_filename)" />
           </div>
-          <div class="topic-date">{{ generateDate(news.created_at) }}</div>
+          <div class="topic-date">{{ $generateDate(news.created_at) }}</div>
           <div class="topic-title">{{ news.title }}</div>
         </nuxt-link>
       </div>
@@ -82,15 +82,6 @@ export default {
       if (response.status === 200) {
         this.currentNews = response.data;
       }
-    },
-    generateDate(date) {
-      return date.substr(0, 10);
-    },
-    generateImageUrl(filename) {
-      if (filename) {
-        return `${process.env.API_NEWS_BASE_URL}/cache/uploads/${filename}`;
-      }
-      return require("@/assets/image/news/thumb-default.gif");
     },
   },
   mounted() {

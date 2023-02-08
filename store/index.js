@@ -60,7 +60,29 @@ const actions = {
         let response = null;
         try {
             response = await axios.get(
-                `${process.env.API_NEWS_BASE_URL}/posts/${page}`
+                `${process.env.API_NEWS_BASE_URL}/posts/index?page=${page}`
+            );
+        } catch (err) {
+            commit('SET_ERROR_MESSAGE', err.response.data)
+        }
+
+        let data = {
+            news_data: response.data.news_data,
+            paginate: {
+                page: response.data.page,
+                limit: response.data.limit,
+                count: response.data.count,
+            },
+        };
+
+        commit("SET_POST_DATA", data);
+    },
+    //ニュース一覧取得 店舗別
+    async fetchNewsByShop({ commit }, args) {
+        let response = null;
+        try {
+            response = await axios.get(
+                `${process.env.API_NEWS_BASE_URL}/posts/shop/${args.shopId}?page=${args.page}`
             );
         } catch (err) {
             commit('SET_ERROR_MESSAGE', err.response.data)
