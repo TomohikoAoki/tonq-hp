@@ -6,23 +6,7 @@
         <h2 class="news-list__title">ニュース一覧</h2>
         <Loading ref="loading"></Loading>
         <div v-if="postData">
-          <ul class="news-area">
-            <li
-              v-for="(news, index) in postData.news_data"
-              :key="index"
-              class="news"
-            >
-              <div @click="toDetail(news.id)" class="news-wrap">
-                <div class="news-image">
-                  <img :src="$generateImageUrl(news.thumb_filename)" />
-                </div>
-                <div class="news-title">
-                  <div class="date">{{ $generateDate(news.created_at) }}</div>
-                  <div class="title">{{ news.title }}</div>
-                </div>
-              </div>
-            </li>
-          </ul>
+          <List :postData="postData.news_data"></List>
           <Pagination
             @paging="fetchPage"
             :paginate="postData.paginate"
@@ -40,6 +24,7 @@
 <script>
 import Categories from "../../components/news/Categories.vue";
 import NewsHeader from "../../components/news/Header.vue";
+import List from "../../components/news/NewsList.vue";
 import Loading from "../../components/LoadingArticle.vue";
 import Pagination from "../../components/news/Pagination2.vue";
 
@@ -48,47 +33,49 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      page: 1,
-    }
+      page: null,
+    };
   },
   components: {
     Categories,
     NewsHeader,
     Loading,
     Pagination,
+    List,
   },
   computed: {
     ...mapGetters({
       postData: "getPostData",
       errorMessage: "getErrorMessage",
-      shopLabels: "shops/getShopLabels"
     }),
   },
   methods: {
     async fetchNews(page = null) {
       this.$refs.loading.start();
       await this.$store.dispatch("fetchNews", page);
-      this.$refs.loading.finish();
+      if (this.$refs.loading) this.$refs.loading.finish();
     },
     fetchPage(n) {
-      this.page = Number(n)
+      this.page = Number(n);
       this.$router.push({ query: { page: this.page } });
       window.scrollTo({
         top: 0,
       });
     },
-    toDetail(id) {
-      this.$router.push(`/news/${id}`);
-    },
   },
   mounted() {
-    this.fetchNews();
+    this.page = this.$route.query.page ? this.$route.query.page : 1;
+    this.fetchNews(this.page);
   },
+  //pagination用　クエリの変化で稼働
   beforeRouteUpdate(to, from, next) {
-    this.page = (to.query.page) ? Number(to.query.page)  : 1
-    this.fetchNews(this.page)
-    next()
-  }
+    if (to.path === from.path) {
+      this.page = to.query.page ? Number(to.query.page) : 1;
+      this.fetchNews(this.page);
+      next();
+    }
+    next();
+  },
 };
 </script>
 
@@ -105,6 +92,7 @@ export default {
     display: flex;
     max-width: 1360px;
     width: 95%;
+    min-height: 60vh;
     margin: 0 auto;
     .column-left {
       width: 70%;
@@ -115,43 +103,5 @@ export default {
   }
 }
 
-.news-area {
-  > li:nth-child(odd) {
-    background-color: rgb(244, 248, 255);
-  }
-  .news {
-    background-color: #fff;
-    &:hover {
-      filter: brightness(93%);
-    }
-    .news-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      width: 100%;
-      height: 100%;
-      padding: 10px 0 10px 10px;
-      .news-image {
-        width: 120px;
-        height: 90px;
-        background-color: rgb(192, 192, 192);
-        img {
-          width: 100%;
-        }
-      }
-      .news-title {
-        flex: 1;
-        margin-left: 1em;
-        .title {
-          font-weight: bold;
-          font-size: 1.3em;
-        }
-        .date {
-          font-weight: bold;
-          color: rgb(114, 101, 101);
-          padding: 0 0 0.3em 0;
-        }
-      }
-    }
-  }
-}
+
 </style>

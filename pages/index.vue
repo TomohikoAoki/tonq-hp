@@ -42,8 +42,8 @@
     <div class="news">
       <p class="news-title">news</p>
       <div class="topic-area">
-        <nuxt-link
-          :to="{ path: '/news/_article', query: { id: news.id } }"
+        <div
+          @click="toDetail(news.id)"
           class="topic"
           v-for="(news, index) in currentNews"
           :key="index"
@@ -53,7 +53,7 @@
           </div>
           <div class="topic-date">{{ $generateDate(news.created_at) }}</div>
           <div class="topic-title">{{ news.title }}</div>
-        </nuxt-link>
+        </div>
       </div>
     </div>
     <div class="link-area"></div>
@@ -82,6 +82,9 @@ export default {
       if (response.status === 200) {
         this.currentNews = response.data;
       }
+    },
+    toDetail(id) {
+      this.$router.push(`/news/${id}`);
     },
   },
   mounted() {

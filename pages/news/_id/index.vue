@@ -6,10 +6,10 @@
         <Loading ref="loading"></Loading>
         <div v-if="postData" class="article">
           <div class="article-header">
-            <h2 class="article-title">{{ postData.title }}</h2>
             <div class="article-date">
               {{ $generateDate(postData.created_at) }}
             </div>
+            <h2 class="article-title">{{ postData.title }}</h2>
           </div>
           <div class="article-content" v-html="postData.content"></div>
         </div>
@@ -62,6 +62,7 @@ export default {
   display: flex;
   max-width: 1360px;
   width: 95%;
+  min-height: 60vh;
   margin: 0 auto;
   .column-left {
     width: 70%;
@@ -81,6 +82,7 @@ export default {
     }
     .article-date {
       font-weight: bold;
+      color: #556ea0;
     }
   }
 }

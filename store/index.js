@@ -131,7 +131,6 @@ const actions = {
                         Authorization: AuthHeader,
                         "Content-Type": "multipart/form",
                     },
-                    withCredentials: true,
                 });
             } catch (err) {
                 $nuxt.$loading.finish();
@@ -167,7 +166,6 @@ const actions = {
                     Authorization: AuthHeader,
                     "Content-Type": "application/json",
                 },
-                withCredentials: true,
             });
         } catch (err) {
             $nuxt.$loading.finish();
@@ -205,6 +203,9 @@ const actions = {
     },
     changeSuccessFlag(context) {
         context.commit("SET_SUCCESS_FLAG");
+    },
+    clearPostData({ commit }) {
+        commit('CLEAR_POST_DATA')
     },
 };
 

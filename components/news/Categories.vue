@@ -4,7 +4,7 @@
     <div>
       <p class="category-title__sub">店舗別</p>
       <ul class="category__list">
-        <li v-for="(shop, index) in shops" :key="index" class="list-item">
+        <li v-for="(shop, index) in shops" :key="index" class="list-item" :class="{active: shop.id === shopId}">
           <div @click="toShopIndex(shop)">
           {{ shop.name.replace("とんかつとんＱ", "") }}
         </div>
@@ -18,6 +18,7 @@
 import { mapGetters } from "vuex";
 
 export default {
+  props: ['shopId'],
   computed: {
     ...mapGetters({
       shops: "shops/getShop",
@@ -51,6 +52,11 @@ export default {
     padding: 0 0 0 1em;
     .list-item {
       padding: 0.3em 0;
+      cursor:pointer;
+      &.active {
+        color: cadetblue;
+        font-weight: bold;
+      }
     }
   }
 }

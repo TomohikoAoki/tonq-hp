@@ -22,6 +22,9 @@ export default {
   },
   computed: {
     generateIcon() {
+      if(this.paginate.count < 8) {
+        return 0
+      }
       return Math.ceil(this.paginate.count / this.paginate.limit);
     },
   },
