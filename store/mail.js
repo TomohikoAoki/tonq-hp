@@ -4,6 +4,7 @@ const state = () => ({
     token: null,
     auth: "b647f62728a3e9a7ee5aa6992815c9c880aca65f5e290ba593e651e479bc5d4c",
     confirmData: null,
+    invalidMessage: null
 });
 
 const mutations = {
@@ -13,6 +14,9 @@ const mutations = {
     SET_CONFIRM_DATA(state, data) {
         state.confirmData = data;
     },
+    SET_INVALID_MESSAGE(state, message) {
+        state.invalidMessage = message
+    }
 };
 
 const actions = {
@@ -29,7 +33,7 @@ const actions = {
                 withCredentials: true,
             });
         } catch (err) {
-            this.$store.dispatch("error/catchError", error.response.data, { root: true });
+            this.$store.dispatch("error/catchError", err.response, { root: true });
         }
 
         commit("SET_TOKEN", response.data);
@@ -37,6 +41,8 @@ const actions = {
 
     //mail サーバーサイドのバリデーション
     async checkMail({ state, commit }, data) {
+        commit('SET_INVALID_MESSAGE', null)
+
         Object.keys(state.token).forEach(function(key) {
             data[key] = this[key];
         }, state.token);
@@ -54,11 +60,13 @@ const actions = {
                 }
             );
         } catch (err) {
-            if (error.response.status === 422) {
+            if (err.response.status === 422) {
                 //this.$refs.obs.setErrors(error.response.data);
+                commit('SET_INVALID_MESSAGE', err.response.data.messages)
+                commit("SET_TOKEN", err.response.data.token);
                 return;
             }
-            this.$store.dispatch("error/catchError", error.response.data, { root: true });
+            this.$store.dispatch("error/catchError", err.response, { root: true });
         }
 
         commit("SET_CONFIRM_DATA", response.data.body);
@@ -78,7 +86,7 @@ const actions = {
                 }
             );
         } catch (err) {
-            this.$store.dispatch("error/catchError", error.response.data, { root: true });
+            this.$store.dispatch("error/catchError", err.response, { root: true });
         }
         commit("SET_CONFIRM_DATA", null);
         commit("SET_TOKEN", null);
@@ -86,7 +94,8 @@ const actions = {
 };
 
 const getters = {
-    getConfirmData: (state) => state.confirmData
+    getConfirmData: (state) => state.confirmData,
+    getInvalidMessage: (state) => state.invalidMessage
 };
 
 export default {

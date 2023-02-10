@@ -95,13 +95,12 @@ export default {
   },
   methods: {
     async login() {
+      $nuxt.$loading.start()
       const user = await this.$fire.auth.signInWithEmailAndPassword(
         this.formData.email,
         this.formData.password
       );
       return true;
-
-
     },
     redirectTop() {
       this.$router.push("/news/form/");

@@ -49,6 +49,7 @@
             </li>
           </ul>
         </div>
+        <div v-if="cookieCheck">
         <ValidationObserver ref="obs" v-slot="ObserverProps">
           <form class="contact-form">
             <div class="form-group">
@@ -132,12 +133,10 @@
               </ValidationProvider>
             </div>
             <div class="form-group">
-              <label class="label"
-                >電話番号<span class="required">必須</span></label
-              >
+              <label class="label">電話番号</label>
               <ValidationProvider
                 v-slot="{ errors }"
-                rules="required|phoneNumber"
+                rules="phoneNumber"
                 name="phoneNumber"
                 class="input-area"
               >
@@ -292,12 +291,16 @@
               type="submit"
               class="btn button02"
               :class="{ disable: ObserverProps.invalid }"
+              :disabled="ObserverProps.invalid || !ObserverProps.validated"
             >
-              <!--:disabled="ObserverProps.invalid || !ObserverProps.validated"-->
               確認
             </button>
           </form>
         </ValidationObserver>
+      </div>
+      <div v-if="!cookieCheck" class="cookie-false">
+        <p>こちらのフォームからお問い合わせいただく為には、<br>ブラウザのcookieを有効にする必要があります。</p>
+      </div>
       </section>
       <contactConfirmModal
         v-if="confirmFlag"
@@ -311,7 +314,7 @@
         <p class="thanks-content__title">
           お問い合わせ<span class="sp_block">ありがとうございました。</span>
         </p>
-        <p class="thanks-content__text">入力内容を送信いたしました。<br></p>
+        <p class="thanks-content__text">入力内容を送信いたしました。<br /></p>
         <p class="thanks-content__text">
           当社からの返信はできるかぎり迅速に送らせていただきます。<br />１週間経っても返信が無い場合は恐れ入りますが、お電話番号を明記の上、再度お問い合わせいただくか、または下記電話番号までご連絡ください。
         </p>
@@ -320,7 +323,8 @@
           ><span class="sp_block">FAX：029-852-1094</span> E-mail：<span
             class="sp_block"
             ><a href="mailto:honbu@ton-q.com">honbu@ton-q.com</a></span
-          ></p>
+          >
+        </p>
       </div>
       <nuxt-link to="/" class="btn home">ホームに戻る</nuxt-link>
     </div>
@@ -337,6 +341,7 @@ export default {
     return {
       confirmFlag: false,
       showForm: true,
+      cookieCheck: true,
       formData: {
         lastName: "",
         firstName: "",
@@ -353,13 +358,14 @@ export default {
     };
   },
   layout() {
-    return 'main'
+    return "main";
   },
   computed: {
     ...mapState("shops", ["shopData"]),
     ...mapGetters({
-      confirmData: 'mail/getConfirmData',
-    })
+      confirmData: "mail/getConfirmData",
+      invalidMessage: "mail/getInvalidMessage",
+    }),
   },
   methods: {
     //郵便番号検索
@@ -389,19 +395,30 @@ export default {
         this.formData[key] = this.formData[key].trim().replace(/( |　)/g, "");
       });
 
-      await this.$store.dispatch('mail/checkMail', this.formData)
+      await this.$store.dispatch("mail/checkMail", this.formData);
 
       this.$nuxt.$loading.finish();
+
+      //バリデーションエラーだったら
+      if (this.invalidMessage) {
+        this.$refs.obs.setErrors(this.invalidMessage);
+        return false;
+      }
       this.confirmFlag = true;
     },
 
     //初回訪問時　トークン発行
     async fetchToken() {
-      await this.$store.dispatch('mail/fetchToken')
+      if (!navigator.cookieEnabled) {
+        this.cookieCheck = false
+        return false
+      }
+      await this.$store.dispatch("mail/fetchToken");
+
     },
     //メール送信完了　サンクス画面表示
     success() {
-      this.init()
+      this.init();
       this.showForm = false;
 
       window.scrollTo({ top: 0 });
@@ -423,6 +440,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.contact {
+  padding-bottom: 60px;
+}
 .content-contact {
   position: relative;
 }
@@ -610,6 +630,14 @@ export default {
       width: 100%;
     }
   }
+}
+.cookie-false {
+  border: 1px solid;
+  max-width: 500px;
+  margin: 30px auto;
+  text-align: center;
+  padding: 3em 1em;
+  border-radius: 10px;
 }
 
 .btn {

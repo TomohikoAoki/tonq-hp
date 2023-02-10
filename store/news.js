@@ -31,7 +31,6 @@ const actions = {
                 `${process.env.API_NEWS_BASE_URL}/posts/index?page=${page}`
             );
         } catch (err) {
-            console.log(err)
             commit("SET_ERROR_MESSAGE", err.response.data);
         }
 
