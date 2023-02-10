@@ -328,7 +328,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 const axios = require("axios");
 
@@ -336,7 +336,6 @@ export default {
   data() {
     return {
       confirmFlag: false,
-      confirmData: "",
       showForm: true,
       formData: {
         lastName: "",
@@ -353,8 +352,14 @@ export default {
       },
     };
   },
+  layout() {
+    return 'main'
+  },
   computed: {
     ...mapState("shops", ["shopData"]),
+    ...mapGetters({
+      confirmData: 'mail/getConfirmData',
+    })
   },
   methods: {
     //郵便番号検索
@@ -384,56 +389,19 @@ export default {
         this.formData[key] = this.formData[key].trim().replace(/( |　)/g, "");
       });
 
-      let response = null;
+      await this.$store.dispatch('mail/checkMail', this.formData)
 
-      try {
-        response = await axios.post(
-          `${process.env.API_NEWS_BASE_URL}/mail/check`,
-          this.formData,
-          {
-            withCredentials: true,
-          }
-        );
-      } catch (err) {
-        this.$nuxt.$loading.finish();
-        if (error.response.status === 422) {
-          this.$refs.obs.setErrors(error.response.data);
-          return;
-        }
-        this.$store.dispatch("error/catchError", error.response);
-      }
       this.$nuxt.$loading.finish();
-      this.formData["csrf_name"] = response.data.token["csrf_name"];
-      this.formData["csrf_value"] = response.data.token["csrf_value"];
-      this.confirmData = response.data;
       this.confirmFlag = true;
     },
 
     //初回訪問時　トークン発行
     async fetchToken() {
-      let response = null;
-      try {
-        response = await axios({
-          method: "GET",
-          url: `${process.env.API_NEWS_BASE_URL}/mail/token`,
-          headers: {
-            Authorization: "",
-          },
-          withCredentials: true,
-        });
-      } catch (err) {
-        console.log(err.response);
-      }
-
-      this.formData["csrf_name"] = response.data["csrf_name"];
-      this.formData["csrf_value"] = response.data["csrf_value"];
+      await this.$store.dispatch('mail/fetchToken')
     },
     //メール送信完了　サンクス画面表示
-    success(response) {
-      Object.keys(this.formData).forEach((key) => {
-        this.formData[key] = "";
-      });
-      this.confirmFlag = false;
+    success() {
+      this.init()
       this.showForm = false;
 
       window.scrollTo({ top: 0 });
@@ -441,7 +409,6 @@ export default {
     //mount時　初期化
     init() {
       this.confirmFlag = false;
-      this.confirmData = "";
       Object.keys(this.formData).forEach((key) => {
         this.formData[key] = "";
       });

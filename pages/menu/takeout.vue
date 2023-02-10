@@ -202,6 +202,9 @@ export default {
       menuData: this.$store.getters["products/getMenuAllData"],
     };
   },
+  layout() {
+    return "main"
+  },
   computed: {
     //やまと豚をテイクアウト用に強引に変換
     //厚切りの値段をぶっこむ（値段の変更の場合にstoreの変更だけで済むように）

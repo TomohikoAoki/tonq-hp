@@ -36,16 +36,19 @@ export default {
     NewsHeader,
     Loading
   },
+  layout() {
+    return "main"
+  },
   computed: {
     ...mapGetters({
-      postData: 'getPostData',
-      errorMessage: 'getErrorMessage',
+      postData: 'news/getPostData',
+      errorMessage: 'news/getErrorMessage',
     })
   },
   methods: {
     async fetchArticle(id) {
       this.$refs.loading.start()
-      await this.$store.dispatch('fetchPost', id)
+      await this.$store.dispatch('news/fetchPost', id)
       this.$refs.loading.finish()
     },
   },

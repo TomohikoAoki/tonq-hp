@@ -8,17 +8,19 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
+  layout() {
+    return "main";
+  },
   computed: {
     ...mapGetters({
-      message: 'error/getErrorMessage',
-      code: 'error/getErrorCode'
-    })
-  }
-
-}
+      message: "error/getErrorMessage",
+      code: "error/getErrorCode",
+    }),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -26,14 +28,14 @@ export default {
   height: 70vh;
 }
 .btn.home {
-    display: block;
-    width: 150px;
-    background-color: #666;
-    text-align: center;
-    padding: 1em 0;
-    border-radius: 10px;
-    color: #fff;
-    font-weight: bold;
-    margin: 50px auto 0 auto;
-  }
+  display: block;
+  width: 150px;
+  background-color: #666;
+  text-align: center;
+  padding: 1em 0;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
+  margin: 50px auto 0 auto;
+}
 </style>

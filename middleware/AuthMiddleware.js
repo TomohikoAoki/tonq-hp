@@ -7,8 +7,7 @@ export default async function({ store, route, redirect }) {
     }
     if (route.path === "/news/form/login") {
         if (user) {
-            console.log('たまに効かない')
-            return redirect("/news/form/top")
+            return redirect("/news/form/")
         }
     }
 }

@@ -1,6 +1,6 @@
 export default async({ app, store }) => {
     app.router.afterEach((to, from) => {
         store.dispatch('options/changeModalNav', false)
-        store.dispatch('clearPostData')
+        store.dispatch('news/clearPostData')
     })
 }

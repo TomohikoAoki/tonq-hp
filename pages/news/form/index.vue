@@ -33,7 +33,7 @@
         </div>
         <Pagination
             @paging="fetchPage"
-            :paginate="postData.paginate"
+            :paginate="postData.pagination"
           ></Pagination>
       </div>
     </div>
@@ -44,7 +44,6 @@
 import Confirm from "../../../components/Confirm.vue";
 import Pagination from "../../../components/news/Pagination2.vue";
 import Loading from "../../../components/LoadingArticle.vue";
-const axios = require("axios");
 
 import { mapGetters } from "vuex";
 
@@ -52,6 +51,7 @@ export default {
   data() {
     return {
       mode: "delete",
+      page: null,
     };
   },
   layout() {
@@ -64,8 +64,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      postData: "getPostData",
-      error: 'getErrorMessage',
+      postData: "news/getPostData",
+      error: 'news/getErrorMessage',
     }),
   },
   methods: {
@@ -73,7 +73,7 @@ export default {
     async pushDelete(id) {
       if (window.confirm("delete OK?")) {
         $nuxt.$loading.start();
-        await this.$store.dispatch("deleteArticle", id);
+        await this.$store.dispatch("news/deleteArticle", id);
         return false;
       }
       return false;
@@ -81,19 +81,29 @@ export default {
     //ニュースデータ取得
     async fetchNews(page) {
       this.$refs.loading.start();
-      await this.$store.dispatch("fetchNews", page);
-      this.$refs.loading.finish();
+      await this.$store.dispatch("news/fetchNews", page);
+      if (this.$refs.loading)this.$refs.loading.finish();
     },
     fetchPage(n) {
+      this.page = Number(n);
+      this.$router.push({ query: { page: this.page } });
       window.scrollTo({
         top: 0,
       });
-      this.$refs.loading.start();
-      this.fetchNews(n);
     },
   },
   mounted() {
-    this.fetchNews();
+    this.page = this.$route.query.page ? this.$route.query.page : 1;
+    this.fetchNews(this.page);
+  },
+  //pagination用　クエリの変化で稼働
+  beforeRouteUpdate(to, from, next) {
+    if (to.path === from.path) {
+      this.page = to.query.page ? Number(to.query.page) : 1;
+      this.fetchNews(this.page);
+      next();
+    }
+    next();
   },
 };
 </script>

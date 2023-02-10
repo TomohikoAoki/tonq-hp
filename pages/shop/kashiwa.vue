@@ -17,5 +17,8 @@ export default {
       shopId: 8,
     };
   },
+  layout() {
+    return "main"
+  },
 };
 </script>

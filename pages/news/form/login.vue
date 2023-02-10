@@ -104,7 +104,7 @@ export default {
 
     },
     redirectTop() {
-      this.$router.push("/news/form/top");
+      this.$router.push("/news/form/");
       return false;
     },
   },

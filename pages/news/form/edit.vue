@@ -28,18 +28,18 @@ export default {
   },
   computed: {
     ...mapGetters({
-      postData: 'getPostData',
-      error: 'getErrorMessage',
+      postData: 'news/getPostData',
+      error: 'news/getErrorMessage',
     })
   },
   methods: {
     async fetchArticle(id) {
-      await this.$store.dispatch('fetchPost', id)
+      await this.$store.dispatch('news/fetchPost', id)
     },
     sendData(formData) {
       formData.mode = this.mode
       formData.formData.id = this.articleId
-      this.$store.dispatch('sendArticle', formData)
+      this.$store.dispatch('news/sendArticle', formData)
     }
   },
   mounted() {

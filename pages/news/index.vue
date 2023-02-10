@@ -9,7 +9,7 @@
           <List :postData="postData.news_data"></List>
           <Pagination
             @paging="fetchPage"
-            :paginate="postData.paginate"
+            :paginate="postData.pagination"
           ></Pagination>
         </div>
         <div v-else-if="errorMessage">{{ errorMessage }}</div>
@@ -43,16 +43,19 @@ export default {
     Pagination,
     List,
   },
+  layout() {
+    return "main"
+  },
   computed: {
     ...mapGetters({
-      postData: "getPostData",
-      errorMessage: "getErrorMessage",
+      postData: "news/getPostData",
+      errorMessage: "news/getErrorMessage",
     }),
   },
   methods: {
     async fetchNews(page = null) {
       this.$refs.loading.start();
-      await this.$store.dispatch("fetchNews", page);
+      await this.$store.dispatch("news/fetchNews", page);
       if (this.$refs.loading) this.$refs.loading.finish();
     },
     fetchPage(n) {

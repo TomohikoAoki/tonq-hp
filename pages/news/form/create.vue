@@ -25,7 +25,7 @@ export default {
   methods: {
     async sendData(formData) {
       formData.mode = this.mode
-      await this.$store.dispatch('sendArticle', formData)
+      await this.$store.dispatch('news/sendArticle', formData)
     }
   }
 }

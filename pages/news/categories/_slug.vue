@@ -11,7 +11,7 @@
           <List :postData="postData.news_data"></List>
           <Pagination
             @paging="fetchPage"
-            :paginate="postData.paginate"
+            :paginate="postData.pagination"
           ></Pagination>
         </div>
         <div v-else-if="errorMessage">{{ errorMessage }}</div>
@@ -39,6 +39,9 @@ export default {
       page: null,
     };
   },
+  layout() {
+    return "main"
+  },
   components: {
     Categories,
     NewsHeader,
@@ -48,14 +51,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      postData: "getPostData",
-      errorMessage: "getErrorMessage",
+      postData: "news/getPostData",
+      errorMessage: "news/getErrorMessage",
     }),
   },
   methods: {
     async fetchNewsByShop(shopId, page = null) {
       this.$refs.loading.start();
-      await this.$store.dispatch("fetchNewsByShop", {
+      await this.$store.dispatch("news/fetchNewsByShop", {
         shopId: shopId,
         page: page,
       });

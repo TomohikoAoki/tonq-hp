@@ -122,6 +122,14 @@
   </div>
 </template>
 
+<script>
+  export default {
+    layout() {
+      return "main"
+    },
+  }
+</script>
+
 <style lang="scss" scoped>
 .shop {
   background-color: #ffffff;

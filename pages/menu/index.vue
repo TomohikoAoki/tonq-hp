@@ -134,6 +134,9 @@
 import NaviVue from "../../components/shop/Nav.vue";
 
 export default {
+  layout() {
+    return 'main'
+  },
   components: {
     NaviVue,
   },

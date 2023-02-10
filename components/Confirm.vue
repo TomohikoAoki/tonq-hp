@@ -24,17 +24,17 @@ export default {
   },
   computed: {
     ...mapGetters({
-      flag: "getSuccessFlag",
+      flag: "news/getSuccessFlag",
     }),
   },
   methods: {
     changeSuccessFlag() {
-      this.$store.dispatch('changeSuccessFlag')
+      this.$store.dispatch('news/changeSuccessFlag')
       if(this.mode === 'delete') {
         location.reload()
         return false
       }
-      this.$router.push('/news/form/top')
+      this.$router.push('/news/form/')
     }
   },
   mounted() {

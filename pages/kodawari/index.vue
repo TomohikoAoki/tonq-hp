@@ -223,6 +223,14 @@
   </div>
 </template>
 
+<script>
+export default {
+layout() {
+    return 'main'
+  }
+}
+</script>
+
 <style lang="scss" scoped>
 .kodawari {
   padding: 50px 0 0 0;

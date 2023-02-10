@@ -39,6 +39,9 @@ export default {
       ArrayComponents: ["YamatoVue", "AkagiVue", "EbiVue", "IrodoriVue"],
     };
   },
+  layout() {
+    return 'main'
+  },
   computed: {
     currentComponent() {
       return this.ArrayComponents[this.current];

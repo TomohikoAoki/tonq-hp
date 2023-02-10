@@ -73,6 +73,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  layout() {
+    return 'main'
+  },
+}
+</script>
+
 <style lang="scss" scoped>
 .lunch-top {
   .top-title-area {

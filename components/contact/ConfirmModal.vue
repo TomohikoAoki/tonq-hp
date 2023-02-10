@@ -4,7 +4,7 @@
       <div class="confirm-title">内容確認<span>confirm</span></div>
       <dl class="data-area">
         <div
-          v-for="(value, key) in confirmData.body"
+          v-for="(value, key) in confirmData"
           :key="key"
           class="confirm-data-group"
         >
@@ -49,7 +49,7 @@ export default {
         gender: "性別",
         zipCode: "郵便番号",
         addI: "住所1",
-        addII:"住所１以下",
+        addII: "住所１以下",
         shop: "店舗",
         content: "お問い合わせ内容",
       },
@@ -62,23 +62,11 @@ export default {
     },
     async sendMail() {
       this.$nuxt.$loading.start();
-      await axios
-        .post(
-          `${process.env.API_NEWS_BASE_URL}/mail/send`,
-          {
-            csrf_name: this.confirmData.token["csrf_name"],
-            csrf_value: this.confirmData.token["csrf_value"],
-          },
-          { withCredentials: true }
-        )
-        .then((response) => {
-          this.$nuxt.$loading.finish();
-          this.$emit("success", response);
-        })
-        .catch((error) => {
-          this.$nuxt.$loading.finish();
-          this.$store.dispatch("error/catchError", error.response);
-        });
+
+      await this.$store.dispatch('mail/sendMail')
+
+      this.$nuxt.$loading.finish();
+      this.$emit("success");
     },
     changeLabels(key) {
       return this.labels[key];
