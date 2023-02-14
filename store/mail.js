@@ -61,7 +61,6 @@ const actions = {
             );
         } catch (err) {
             if (err.response.status === 422) {
-                //this.$refs.obs.setErrors(error.response.data);
                 commit('SET_INVALID_MESSAGE', err.response.data.messages)
                 commit("SET_TOKEN", err.response.data.token);
                 return;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="shop-wrap">
+    <div class="shop-wrap" v-if="mounted">
       <ShopTopVue :shopData="shopData"></ShopTopVue>
       <WrapCalendarVue :shopData="shopData" class="calendar" v-if="shopData.calendar"></WrapCalendarVue>
       <ShopNavVue></ShopNavVue>
@@ -28,13 +28,19 @@ export default {
     ShopLinkVue,
   },
   props:[
-    "shopId"
+    "shopData"
   ],
   data() {
     return {
-      shopData: this.$store.getters["shops/getShopData"](this.shopId),
-    };
+      mounted: false
+    }
   },
+
+  created() {
+    if (this.shopData) {
+      this.mounted = true
+    }
+  }
 };
 </script>
 

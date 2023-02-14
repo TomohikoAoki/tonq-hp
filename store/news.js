@@ -31,7 +31,8 @@ const actions = {
                 `${process.env.API_NEWS_BASE_URL}/posts/index?page=${page}`
             );
         } catch (err) {
-            commit("SET_ERROR_MESSAGE", err.response.data);
+            commit("SET_ERROR_MESSAGE", 'データを取得できませんでした。時間をおいて再度お試しください');
+            return false
         }
 
         let data = response.data;
@@ -47,7 +48,8 @@ const actions = {
                 `${process.env.API_NEWS_BASE_URL}/posts/shop/${args.shopId}?page=${args.page}`
             );
         } catch (err) {
-            commit("SET_ERROR_MESSAGE", err.response.data);
+            commit("SET_ERROR_MESSAGE", 'データを取得できませんでした。時間をおいて再度お試しください');
+            return false
         }
 
         let data = response.data;
@@ -64,8 +66,26 @@ const actions = {
             );
         } catch (err) {
             commit("SET_ERROR_MESSAGE", err.response.data);
+            return false
         }
         commit("SET_POST_DATA", response.data);
+    },
+
+    //【GET】ニュース最新public ３件取得
+    async fetchCurrentNews({ commit }) {
+        let response = null;
+        try {
+            response = await axios.get(
+                `${process.env.API_NEWS_BASE_URL}/posts/current`
+            );
+        } catch (err) {
+            commit("SET_ERROR_MESSAGE", 'データを取得できませんでした。時間をおいて再度お試しください');
+            return false
+        }
+
+        let data = response.data;
+
+        commit("SET_POST_DATA", data);
     },
 
     //【POST,PUT】ニュース記事送信 作成＆編集
@@ -158,6 +178,9 @@ const actions = {
     clearPostData({ commit }) {
         commit("CLEAR_POST_DATA");
     },
+    clearErrorMessage({ commit }) {
+        commit('SET_ERROR_MESSAGE', null)
+    }
 };
 
 const getters = {

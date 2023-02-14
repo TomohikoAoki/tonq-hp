@@ -1,15 +1,32 @@
 <template>
   <div class="top">
-    <div class="header-nav">
-      <ul class="header-link-list">
-        <li class="header-link-item"><nuxt-link to="menu">お品書き</nuxt-link></li>
-        <li class="header-link-item"><nuxt-link to="kodawari">こだわり</nuxt-link></li>
-        <li class="header-link-item"><nuxt-link to="shop">店舗紹介</nuxt-link></li>
-        <li class="header-link-item"><nuxt-link to="news">お知らせ</nuxt-link></li>
-      </ul>
-    </div>
-    <div class="slider-area">
-      <img src="~assets/image/top/image-top.webp">
+    <div class="top-of-top">
+      <div class="header-nav">
+        <ul class="header-link-list">
+          <li class="header-link-item">
+            <nuxt-link to="menu">お品書き</nuxt-link>
+          </li>
+          <li class="header-link-item">
+            <nuxt-link to="kodawari">こだわり</nuxt-link>
+          </li>
+          <li class="header-link-item">
+            <nuxt-link to="shop">店舗紹介</nuxt-link>
+          </li>
+          <li class="header-link-item">
+            <nuxt-link to="news">お知らせ</nuxt-link>
+          </li>
+        </ul>
+      </div>
+      <div class="slider-area">
+        <div class="main-title-image">
+          <img src="~assets/image/top/title-main-sub.svg" class="slide-title" />
+          <img
+            src="~assets/image/top/title-main.svg"
+            class="slide-title fadeout"
+          />
+        </div>
+        <img src="~assets/image/top/image-top.webp" class="main-bg-image" />
+      </div>
     </div>
     <div class="concept">
       <div class="concept-inner inner">
@@ -30,18 +47,27 @@
         <div class="link-btn-image menu">
           <div class="link-btn__inner"></div>
         </div>
-        <div class="link-btn-tag"><img src="~assets/image/top/title-menu.svg" alt="お品書き"><span>MENU</span></div>
+        <div class="link-btn-tag">
+          <img src="~assets/image/top/title-menu.svg" alt="お品書き" /><span
+            >MENU</span
+          >
+        </div>
       </nuxt-link>
       <nuxt-link to="shop" class="menu-and-shop__item">
         <div class="link-btn-image shops">
           <div class="link-btn__inner"></div>
         </div>
-        <div class="link-btn-tag"><img src="~assets/image/top/title-shop.svg" alt="店舗紹介"><span>SHOP</span></div>
+        <div class="link-btn-tag">
+          <img src="~assets/image/top/title-shop.svg" alt="店舗紹介" /><span
+            >SHOP</span
+          >
+        </div>
       </nuxt-link>
     </div>
     <div class="news">
       <p class="news-title">news</p>
-      <div class="topic-area">
+      <div class="topic-area" :class="{ 'no-data': !currentNews }">
+        <Loading ref="loading" class="loading"></Loading>
         <div
           @click="toDetail(news.id)"
           class="topic"
@@ -54,6 +80,9 @@
           <div class="topic-date">{{ $generateDate(news.created_at) }}</div>
           <div class="topic-title">{{ news.title }}</div>
         </div>
+        <p v-if="errMessage" class="error-message">
+          {{ errMessage }}
+        </p>
       </div>
     </div>
     <div class="link-area"></div>
@@ -61,34 +90,48 @@
 </template>
 
 <script>
-import axios from "axios";
+import Loading from "../components/LoadingArticle.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "IndexPage",
   layout() {
     return "top";
   },
+  components: {
+    Loading,
+  },
   data() {
-    return {
-      currentNews: null,
-    };
+    return {};
+  },
+  computed: {
+    ...mapGetters({
+      currentNews: "news/getPostData",
+      errMessage: "news/getErrorMessage",
+    }),
   },
   methods: {
     async fetchNews() {
-      const response = await axios.get(
-        `${process.env.API_NEWS_BASE_URL}/posts/current`
-      );
+      this.$refs.loading.start();
+      await this.$store.dispatch("news/fetchCurrentNews");
 
-      if (response.status === 200) {
-        this.currentNews = response.data;
-      }
+      if (this.$refs.loading) this.$refs.loading.finish();
     },
     toDetail(id) {
       this.$router.push(`/news/${id}`);
     },
+    slideImage() {
+      const images = document.getElementsByClassName("slide-title");
+      setTimeout(() => {
+        images[0].classList.add("fadeout");
+        images[1].classList.remove("fadeout");
+        images[1].classList.add("fadein");
+      }, 2000);
+    },
   },
   mounted() {
     this.fetchNews();
+    this.slideImage();
   },
 };
 </script>
@@ -99,16 +142,17 @@ export default {
 }
 
 .header-nav {
-  position:absolute;
-  top:2em;
-  right:0;
+  position: absolute;
+  top: 2em;
+  right: 0;
+  z-index: 4;
   .header-link-list {
     display: flex;
     list-style: none;
     border-bottom: 1px solid #fff;
-    padding: 0 10em 1em 0 ;
+    padding: 0 10em 1em 0;
     .header-link-item {
-      color:#fff;
+      color: #fff;
       width: 150px;
       text-align: center;
       font-size: 1.2em;
@@ -122,9 +166,32 @@ export default {
 }
 .slider-area {
   background-color: #666;
-  img {
+  position: relative;
+  height: 44.38vw;
+  .main-title-image {
+    position: absolute;
+    top: 8%;
+    left: 8%;
+    height: 100%;
+    width: 18%;
+    filter: drop-shadow(0 0 20px #000) drop-shadow(0 0 15px #000);
+    img {
+      position: absolute;
+    }
+  }
+  .main-bg-image {
     width: 100%;
   }
+}
+
+.fadein {
+  opacity: 1;
+  transition: opacity 1.5s;
+}
+
+.fadeout {
+  opacity: 0;
+  transition: opacity 1.5s;
 }
 .concept {
   background-image: url(static/image/top/bg-concept.webp);
@@ -219,9 +286,9 @@ export default {
       }
       span {
         color: #fff;
-        position:absolute;
-        bottom:1em;
-        left:0;
+        position: absolute;
+        bottom: 1em;
+        left: 0;
         right: 0;
       }
     }
@@ -241,22 +308,55 @@ export default {
     flex-wrap: wrap;
     justify-content: space-around;
     max-width: 1366px;
+    width: 100%;
     margin: 0 auto;
+    box-sizing: border-box;
+    position: relative;
+    &.no-data {
+      padding-top: 25%;
+    }
     .topic {
       width: 32%;
       border: 1px solid;
-      padding: 20px;
+      padding: 20px 20px 20px 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      transition: filter 0.2s;
+      &:hover {
+        filter: brightness(90%)
+      }
       .topic-title {
         font-weight: bold;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 1.1em;
       }
       .topic-date {
         font-weight: bold;
+        color: #233c5c;
+        padding: 1em 0 0.1em 0;
       }
       .topic-image {
+        width: 100%;
+        height: 300px;
         img {
           width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
+    }
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+    .error-message {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 }

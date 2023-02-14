@@ -4,7 +4,7 @@
     <div class="news-contents-area">
       <div class="news-side-column column-left">
         <h2 class="news-list__title">ニュース一覧</h2>
-        <Loading ref="loading"></Loading>
+        <Loading ref="loading" class="loading"></Loading>
         <div v-if="postData">
           <List :postData="postData.news_data"></List>
           <Pagination
@@ -12,7 +12,7 @@
             :paginate="postData.pagination"
           ></Pagination>
         </div>
-        <div v-else-if="errorMessage">{{ errorMessage }}</div>
+        <p v-else-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
       <div class="news-side-column column-right">
         <Categories></Categories>
@@ -99,6 +99,20 @@ export default {
     margin: 0 auto;
     .column-left {
       width: 70%;
+      position: relative;
+      .loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%),translateY(-50%);
+      }
+      .error-message {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+        width: 100%;
+      }
     }
     .column-right {
       width: 28%;
