@@ -25,7 +25,7 @@ import ShopLinkVue from "../../components/shop/Link.vue";
 
 import { mapGetters } from "vuex";
 
-
+import '~/assets/css/shop-common.scss'
 
 export default {
   data() {
@@ -35,39 +35,7 @@ export default {
     };
   },
   head() {
-    return {
-      title: this.filteredShopData.name,
-      meta: [
-        {
-          hid: "description",
-          name: "description",
-          content: this.filteredShopData.description,
-        },
-        {
-          hid: "og:site_name",
-          property: "og:site_name",
-          content: this.filteredShopData.name,
-        },
-        { hid: "og:type", property: "og:type", content: "website" },
-        {
-          hid: "og:url",
-          property: "og:url",
-          content: this.filteredShopData.url,
-        },
-        {
-          hid: "og:title",
-          property: "og:title",
-          content: this.filteredShopData.name,
-        },
-        {
-          hid: "og:description",
-          property: "og:description",
-          content: this.filteredShopData.description,
-        },
-        //{ hid: "og:image", property: "og:image", content: "画像のURL" },
-        //{ name: "twitter:card", content: "summary" }, //　twitterの画像サイズ
-      ],
-    };
+    return this.$generateHead(this.shopId)
   },
   jsonld() {
     return this.$generateJsonLd(this.shopId)
@@ -98,7 +66,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+
 .shop-wrap {
   padding-bottom: 50px;
 }

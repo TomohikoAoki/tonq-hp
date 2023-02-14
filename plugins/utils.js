@@ -56,8 +56,48 @@ export default ({ store }, inject) => {
         return jsonLd;
     };
 
+    //店舗情報からhtmlのhead情報を返す
+    const generateHead = function(shopId) {
+        let shops = store.getters["shops/getShop"];
+        let data = shops.find((item) => item.id === shopId);
+
+        return {
+            title: data.name,
+            meta: [{
+                    hid: "description",
+                    name: "description",
+                    content: data.description,
+                },
+                {
+                    hid: "og:site_name",
+                    property: "og:site_name",
+                    content: data.name,
+                },
+                { hid: "og:type", property: "og:type", content: "website" },
+                {
+                    hid: "og:url",
+                    property: "og:url",
+                    content: data.url,
+                },
+                {
+                    hid: "og:title",
+                    property: "og:title",
+                    content: data.name,
+                },
+                {
+                    hid: "og:description",
+                    property: "og:description",
+                    content: data.description,
+                },
+                //{ hid: "og:image", property: "og:image", content: "画像のURL" },
+                //{ name: "twitter:card", content: "summary" }, //　twitterの画像サイズ
+            ],
+        };
+    };
+
     inject("generateDate", generateDate);
     inject("generateImageUrl", generateImageUrl);
     inject("generateShopLabels", generateShopLabels);
-    inject("generateJsonLd", generateJsonLd)
+    inject("generateJsonLd", generateJsonLd);
+    inject("generateHead", generateHead);
 };

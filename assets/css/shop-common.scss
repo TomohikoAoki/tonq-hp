@@ -1,0 +1,36 @@
+.shop-wrap {
+    padding-bottom: 50px;
+}
+
+.calendar {
+    margin: 30px auto 40px auto;
+}
+
+.shop-bottom-layout {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 1300px;
+    width: 95%;
+    margin: 0 auto;
+    @media screen and (max-width: 1000px) {
+        display: block;
+    }
+    .info {
+        width: 70%;
+        max-width: 900px;
+        flex: 1;
+        margin-right: 30px;
+        @media screen and (max-width: 1000px) {
+            width: 95%;
+            margin: 0 auto;
+        }
+    }
+    .link {
+        width: 350px;
+        @media screen and (max-width: 1000px) {
+            width: 90%;
+            margin: 30px auto;
+        }
+    }
+}
