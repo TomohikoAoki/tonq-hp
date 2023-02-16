@@ -4,7 +4,7 @@ export default {
 
     // Global page headers: https://go.nuxtjs.dev/config-head
     head: {
-        title: "hp-tonq",
+        title: "とんかつとんＱ",
         htmlAttrs: {
             lang: "ja",
             prefix: "og: http://ogp.me/ns#",
@@ -16,7 +16,7 @@ export default {
             { name: "format-detection", content: "telephone=no" },
             { hid: "og:site_name", property: "og:site_name", content: "とんかつとんＱ" },
             { hid: "og:type", property: "og:type", content: "website" },
-            { hid: "og:url", property: "og:url", content: "http://ton-q.com/" },
+            { hid: "og:url", property: "og:url", content: `${process.env.BASE_URL}` },
             { hid: "og:title", property: "og:title", content: "とんかつとんＱ" },
             {
                 hid: "og:description",

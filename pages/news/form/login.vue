@@ -17,7 +17,7 @@
                   <input
                     v-model="formData.email"
                     class="text-input__body"
-                    :class="{ good: passed, bad:!!errors[0] }"
+                    :class="{ good: passed, bad: !!errors[0] }"
                     type="email"
                     placeholder="メールアドレス"
                   />
@@ -36,7 +36,7 @@
           </p>
           <div class="form__group-content">
             <ValidationProvider
-              v-slot="{ errors,passed }"
+              v-slot="{ errors, passed }"
               rules="required"
               name="password"
             >
@@ -45,7 +45,7 @@
                   <input
                     v-model="formData.password"
                     class="text-input__body"
-                    :class="{ good: passed,bad:!!errors[0] }"
+                    :class="{ good: passed, bad: !!errors[0] }"
                     type="password"
                     placeholder="パスワード"
                   />
@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     async login() {
-      $nuxt.$loading.start()
+      $nuxt.$loading.start();
       const user = await this.$fire.auth.signInWithEmailAndPassword(
         this.formData.email,
         this.formData.password

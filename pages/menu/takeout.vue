@@ -205,6 +205,30 @@ export default {
   layout() {
     return "main"
   },
+  head() {
+    return {
+      title: "とんＱのテイクアウト -takeout Menu-",
+      meta: [
+        { hid: "og:title", property: "og:title", content: "とんＱのテイクアウト" },
+        {
+          hid: "description",
+          name: "description",
+          content: `専門店の味をそのままテイクアウト。会議の仕出し弁当や行楽でのお弁当、もちろんご家庭でも是非どうぞ。`,
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content:
+            "専門店の味をそのままテイクアウト。会議の仕出し弁当や行楽でのお弁当、もちろんご家庭でも是非どうぞ。",
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `${process.env.BASE_URL}/menu/takeout`,
+        },
+      ],
+    };
+  },
   computed: {
     //やまと豚をテイクアウト用に強引に変換
     //厚切りの値段をぶっこむ（値段の変更の場合にstoreの変更だけで済むように）

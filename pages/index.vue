@@ -64,33 +64,13 @@
         </div>
       </nuxt-link>
     </div>
-    <div class="news">
-      <p class="news-title">news</p>
-      <div class="topic-area" :class="{ 'no-data': !currentNews }">
-        <Loading ref="loading" class="loading"></Loading>
-        <div
-          @click="toDetail(news.id)"
-          class="topic"
-          v-for="(news, index) in currentNews"
-          :key="index"
-        >
-          <div class="topic-image">
-            <img :src="$generateImageUrl(news.thumb_filename)" />
-          </div>
-          <div class="topic-date">{{ $generateDate(news.created_at) }}</div>
-          <div class="topic-title">{{ news.title }}</div>
-        </div>
-        <p v-if="errMessage" class="error-message">
-          {{ errMessage }}
-        </p>
-      </div>
-    </div>
+    <CurrentNewsVue></CurrentNewsVue>
     <div class="link-area"></div>
   </div>
 </template>
 
 <script>
-import Loading from "../components/LoadingArticle.vue";
+import CurrentNewsVue from "../components/news/CurrentNewsList.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -99,10 +79,7 @@ export default {
     return "top";
   },
   components: {
-    Loading,
-  },
-  data() {
-    return {};
+    CurrentNewsVue,
   },
   computed: {
     ...mapGetters({
@@ -112,13 +89,7 @@ export default {
   },
   methods: {
     async fetchNews() {
-      this.$refs.loading.start();
       await this.$store.dispatch("news/fetchCurrentNews");
-
-      if (this.$refs.loading) this.$refs.loading.finish();
-    },
-    toDetail(id) {
-      this.$router.push(`/news/${id}`);
     },
     slideImage() {
       const images = document.getElementsByClassName("slide-title");
@@ -129,8 +100,10 @@ export default {
       }, 2000);
     },
   },
-  mounted() {
+  created() {
     this.fetchNews();
+  },
+  mounted() {
     this.slideImage();
   },
 };
@@ -295,69 +268,5 @@ export default {
   }
 }
 
-.news {
-  padding: 60px;
-  .news-title {
-    text-align: center;
-    font-weight: bold;
-    padding: 1em 0;
-    font-size: 2em;
-  }
-  .topic-area {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    max-width: 1366px;
-    width: 100%;
-    margin: 0 auto;
-    box-sizing: border-box;
-    position: relative;
-    &.no-data {
-      padding-top: 25%;
-    }
-    .topic {
-      width: 32%;
-      border: 1px solid;
-      padding: 20px 20px 20px 20px;
-      background-color: #fff;
-      border-radius: 5px;
-      transition: filter 0.2s;
-      &:hover {
-        filter: brightness(90%)
-      }
-      .topic-title {
-        font-weight: bold;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        font-size: 1.1em;
-      }
-      .topic-date {
-        font-weight: bold;
-        color: #233c5c;
-        padding: 1em 0 0.1em 0;
-      }
-      .topic-image {
-        width: 100%;
-        height: 300px;
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-      }
-    }
-    .loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-    }
-    .error-message {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-  }
-}
+
 </style>

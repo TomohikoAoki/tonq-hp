@@ -2,7 +2,7 @@
   <div class="main-contents shop">
     <h1 class="shop_title">
       <span class="h1wrap"
-        >店舗紹介<span class="sub-h1">Store introduction</span></span
+        >店舗紹介<span class="sub-h1">Shop introduction</span></span
       >
     </h1>
     <nav class="shop-nav-wrap">
@@ -123,11 +123,35 @@
 </template>
 
 <script>
-  export default {
-    layout() {
-      return "main"
-    },
-  }
+export default {
+  layout() {
+    return "main";
+  },
+  head() {
+    return {
+      title: "店舗紹介 -Shop Introduction-",
+      meta: [
+        { hid: "og:title", property: "og:title", content: "とんＱの店舗紹介" },
+        {
+          hid: "description",
+          name: "description",
+          content: `茨城県つくば市を中心に茨城・千葉・埼玉に８店舗展開するとんＱの店舗紹介です。`,
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content:
+            "茨城県つくば市を中心に茨城・千葉・埼玉に８店舗展開するとんＱの店舗紹介です。",
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `${process.env.BASE_URL}/shop`,
+        },
+      ],
+    };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -147,7 +171,7 @@
   &_title {
     width: 100%;
     max-width: 1600px;
-    font-size: 6.0em;
+    font-size: 6em;
     height: 570px;
     margin: 0 auto;
     color: #483e3e;
@@ -165,7 +189,8 @@
       font-size: 13vw;
       margin: 0 auto;
       padding: 0;
-      filter: drop-shadow(0 0 5px #000) drop-shadow(0 0 7px #000) drop-shadow(0 0 10px #000)
+      filter: drop-shadow(0 0 5px #000) drop-shadow(0 0 7px #000)
+        drop-shadow(0 0 10px #000);
     }
     &::before {
       @media screen and (max-width: 699px) {
@@ -180,7 +205,7 @@
       width: 500px;
       margin: 0 0 0 auto;
       @media screen and (max-width: 849px) {
-         width: 400px;
+        width: 400px;
       }
       @media screen and (max-width: 699px) {
         position: absolute;
@@ -272,12 +297,12 @@
               font-size: 1.2em;
               padding: 0.6em 0 0.4em 0;
               @media screen and (max-width: 550px) {
-                font-size: 4.0vw;
+                font-size: 4vw;
                 text-align: center;
               }
             }
             dd {
-              font-size: 1.0em;
+              font-size: 1em;
               @media screen and (max-width: 550px) {
                 font-size: 0.75em;
                 display: none;

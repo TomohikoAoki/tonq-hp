@@ -50,257 +50,259 @@
           </ul>
         </div>
         <div v-if="cookieCheck">
-        <ValidationObserver ref="obs" v-slot="ObserverProps">
-          <form class="contact-form">
-            <div class="form-group">
-              <label class="label"
-                >名前<span class="required">必須</span></label
-              >
-              <div class="input-area name">
+          <ValidationObserver ref="obs" v-slot="ObserverProps">
+            <form class="contact-form">
+              <div class="form-group">
+                <label class="label"
+                  >名前<span class="required">必須</span></label
+                >
+                <div class="input-area name">
+                  <ValidationProvider
+                    v-slot="{ errors }"
+                    rules="required|max:10"
+                    name="lastName"
+                    class="name-input"
+                  >
+                    <input
+                      v-model="formData.lastName"
+                      type="text"
+                      class="form-input style02"
+                      placeholder="氏名"
+                    />
+                    <span class="error">
+                      {{ errors[0] }}
+                    </span>
+                  </ValidationProvider>
+                  <ValidationProvider
+                    v-slot="{ errors }"
+                    rules="required|max:10"
+                    name="firstName"
+                    class="name-input"
+                  >
+                    <input
+                      v-model="formData.firstName"
+                      type="text"
+                      class="form-input style02"
+                      placeholder="名前"
+                    />
+                    <span class="error">
+                      {{ errors[0] }}
+                    </span>
+                  </ValidationProvider>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label"
+                  >メールアドレス<span class="required">必須</span></label
+                >
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="required|max:10"
-                  name="lastName"
-                  class="name-input"
-                >
-                  <input
-                    v-model="formData.lastName"
-                    type="text"
-                    class="form-input style02"
-                    placeholder="氏名"
-                  />
-                  <span class="error">
-                    {{ errors[0] }}
-                  </span>
-                </ValidationProvider>
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required|max:10"
-                  name="firstName"
-                  class="name-input"
-                >
-                  <input
-                    v-model="formData.firstName"
-                    type="text"
-                    class="form-input style02"
-                    placeholder="名前"
-                  />
-                  <span class="error">
-                    {{ errors[0] }}
-                  </span>
-                </ValidationProvider>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="label"
-                >メールアドレス<span class="required">必須</span></label
-              >
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required|email"
-                name="email"
-                class="input-area"
-              >
-                <input
-                  v-model="formData.email"
-                  type="email"
-                  class="form-input style02"
-                  placeholder="example@ton-q.com"
-                />
-                <span class="error">
-                  {{ errors[0] }}
-                </span>
-              </ValidationProvider>
-            </div>
-            <div class="form-group">
-              <label class="label"
-                >メールアドレス(確認)<span class="required">必須</span></label
-              >
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required|confirmed:email"
-                name="emailConfirmed"
-                class="input-area"
-              >
-                <input
-                  v-model="formData.emailConfirmed"
-                  type="email"
-                  class="form-input style02"
-                />
-                <span class="error">
-                  {{ errors[0] }}
-                </span>
-              </ValidationProvider>
-            </div>
-            <div class="form-group">
-              <label class="label">電話番号</label>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="phoneNumber"
-                name="phoneNumber"
-                class="input-area"
-              >
-                <input
-                  v-model="formData.phoneNumber"
-                  type="tel"
-                  inputmode="numeric"
-                  pattern="^[0-9]+$"
-                  class="form-input style01"
-                  placeholder="0000000000"
-                />
-                <span class="error">
-                  {{ errors[0] }}
-                </span>
-              </ValidationProvider>
-            </div>
-            <div class="form-group">
-              <label class="label">性別</label>
-              <div class="input-area">
-                <label class="radio">
-                  <input
-                    name="radio_group_1"
-                    value="男性"
-                    type="radio"
-                    v-model="formData.gender"
-                  />
-                  男性
-                </label>
-                <label class="radio">
-                  <input
-                    name="radio_group_1"
-                    value="女性"
-                    type="radio"
-                    v-model="formData.gender"
-                  />
-                  女性
-                </label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="label"
-                >郵便番号<span class="required">必須</span></label
-              >
-              <div class="input-area">
-                <ValidationProvider
-                  v-slot="{ errors, passed }"
-                  rules="required|zipCode"
-                  name="zipCode"
+                  rules="required|email"
+                  name="email"
                   class="input-area"
                 >
                   <input
-                    v-model="formData.zipCode"
-                    type="text"
-                    inputmode="numeric"
-                    pattern="^[0-9]+$"
-                    class="form-input style01"
-                    placeholder="1234567"
-                    @input="fetchZipCode"
-                  /><button
-                    @click.prevent="fetchZipCode"
-                    :disabled="!passed"
-                    class="btn button01"
-                    :class="{ disable: !passed }"
-                  >
-                    住所検索
-                  </button>
+                    v-model="formData.email"
+                    type="email"
+                    class="form-input style02"
+                    placeholder="example@ton-q.com"
+                  />
                   <span class="error">
                     {{ errors[0] }}
                   </span>
                 </ValidationProvider>
               </div>
-            </div>
-            <div class="form-group">
-              <label class="label"
-                >住所1<span class="required">必須</span></label
-              >
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                name="address"
-                class="input-area"
-              >
-                <input
-                  v-model="formData.addI"
-                  type="text"
-                  class="form-input style02"
-                />
-                <span class="error">
-                  {{ errors[0] }}
-                </span>
-              </ValidationProvider>
-            </div>
-            <div class="form-group">
-              <label class="label">住所2</label>
-              <div class="input-area">
-                <input
-                  v-model="formData.addII"
-                  type="text"
-                  class="form-input style02"
-                  placeholder="上記以下の住所"
-                />
+              <div class="form-group">
+                <label class="label"
+                  >メールアドレス(確認)<span class="required">必須</span></label
+                >
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="required|confirmed:email"
+                  name="emailConfirmed"
+                  class="input-area"
+                >
+                  <input
+                    v-model="formData.emailConfirmed"
+                    type="email"
+                    class="form-input style02"
+                  />
+                  <span class="error">
+                    {{ errors[0] }}
+                  </span>
+                </ValidationProvider>
               </div>
-            </div>
-            <div class="form-group">
-              <label class="label"
-                >店舗<span class="required">必須</span></label
-              >
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                name="shop"
-                class="input-area"
-              >
-                <select v-model="formData.shop" class="form-input style02">
-                  <option disabled value="">店舗をお選びください</option>
-                  <option
-                    v-for="(shop, index) in shopData"
-                    :key="index"
-                    :value="shop.name"
+              <div class="form-group">
+                <label class="label">電話番号</label>
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="phoneNumber"
+                  name="phoneNumber"
+                  class="input-area"
+                >
+                  <input
+                    v-model="formData.phoneNumber"
+                    type="tel"
+                    inputmode="numeric"
+                    pattern="^[0-9]+$"
+                    class="form-input style01"
+                    placeholder="0000000000"
+                  />
+                  <span class="error">
+                    {{ errors[0] }}
+                  </span>
+                </ValidationProvider>
+              </div>
+              <div class="form-group">
+                <label class="label">性別</label>
+                <div class="input-area">
+                  <label class="radio">
+                    <input
+                      name="radio_group_1"
+                      value="男性"
+                      type="radio"
+                      v-model="formData.gender"
+                    />
+                    男性
+                  </label>
+                  <label class="radio">
+                    <input
+                      name="radio_group_1"
+                      value="女性"
+                      type="radio"
+                      v-model="formData.gender"
+                    />
+                    女性
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label"
+                  >郵便番号<span class="required">必須</span></label
+                >
+                <div class="input-area">
+                  <ValidationProvider
+                    v-slot="{ errors, passed }"
+                    rules="required|zipCode"
+                    name="zipCode"
+                    class="input-area"
                   >
-                    {{ shop.name.replace("とんかつとんＱ", "") }}
-                  </option>
-                  <option value="その他">その他</option>
-                </select>
-                <span class="error">
-                  {{ errors[0] }}
-                </span>
-              </ValidationProvider>
-            </div>
-            <div class="form-group">
-              <label class="label"
-                >お問い合わせ内容<span class="required">必須</span></label
-              >
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                name="content"
-                class="input-area"
-              >
-                <textarea
-                  v-model="formData.content"
+                    <input
+                      v-model="formData.zipCode"
+                      type="text"
+                      inputmode="numeric"
+                      pattern="^[0-9]+$"
+                      class="form-input style01"
+                      placeholder="1234567"
+                      @input="fetchZipCode"
+                    /><button
+                      @click.prevent="fetchZipCode"
+                      :disabled="!passed"
+                      class="btn button01"
+                      :class="{ disable: !passed }"
+                    >
+                      住所検索
+                    </button>
+                    <span class="error">
+                      {{ errors[0] }}
+                    </span>
+                  </ValidationProvider>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label"
+                  >住所1<span class="required">必須</span></label
+                >
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="address"
+                  class="input-area"
+                >
+                  <input
+                    v-model="formData.addI"
+                    type="text"
+                    class="form-input style02"
+                  />
+                  <span class="error">
+                    {{ errors[0] }}
+                  </span>
+                </ValidationProvider>
+              </div>
+              <div class="form-group">
+                <label class="label">住所2</label>
+                <div class="input-area">
+                  <input
+                    v-model="formData.addII"
+                    type="text"
+                    class="form-input style02"
+                    placeholder="上記以下の住所"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label"
+                  >店舗<span class="required">必須</span></label
+                >
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="shop"
+                  class="input-area"
+                >
+                  <select v-model="formData.shop" class="form-input style02">
+                    <option disabled value="">店舗をお選びください</option>
+                    <option
+                      v-for="(shop, index) in shopData"
+                      :key="index"
+                      :value="shop.name"
+                    >
+                      {{ shop.name.replace("とんかつとんＱ", "") }}
+                    </option>
+                    <option value="その他">その他</option>
+                  </select>
+                  <span class="error">
+                    {{ errors[0] }}
+                  </span>
+                </ValidationProvider>
+              </div>
+              <div class="form-group">
+                <label class="label"
+                  >お問い合わせ内容<span class="required">必須</span></label
+                >
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="required"
                   name="content"
-                  class="form-input text-area"
-                ></textarea>
-                <span class="error">
-                  {{ errors[0] }}
-                </span>
-              </ValidationProvider>
-            </div>
-            <button
-              @click.prevent="confirm"
-              type="submit"
-              class="btn button02"
-              :class="{ disable: ObserverProps.invalid }"
-              :disabled="ObserverProps.invalid || !ObserverProps.validated"
-            >
-              確認
-            </button>
-          </form>
-        </ValidationObserver>
-      </div>
-      <div v-if="!cookieCheck" class="cookie-false">
-        <p>こちらのフォームからお問い合わせいただく為には、<br>ブラウザのcookieを有効にする必要があります。</p>
-      </div>
+                  class="input-area"
+                >
+                  <textarea
+                    v-model="formData.content"
+                    name="content"
+                    class="form-input text-area"
+                  ></textarea>
+                  <span class="error">
+                    {{ errors[0] }}
+                  </span>
+                </ValidationProvider>
+              </div>
+              <button
+                @click.prevent="confirm"
+                type="submit"
+                class="btn button02"
+                :class="{ disable: ObserverProps.invalid }"
+                :disabled="ObserverProps.invalid || !ObserverProps.validated"
+              >
+                確認
+              </button>
+            </form>
+          </ValidationObserver>
+        </div>
+        <div v-if="!cookieCheck" class="cookie-false">
+          <p>
+            こちらのフォームからお問い合わせいただく為には、<br />ブラウザのcookieを有効にする必要があります。
+          </p>
+        </div>
       </section>
       <contactConfirmModal
         v-if="confirmFlag"
@@ -357,6 +359,31 @@ export default {
       },
     };
   },
+  head() {
+    return {
+      title: "お問い合わせ -Contact-",
+      meta: [
+        { hid: "og:title", property: "og:title", content: "お問い合わせ" },
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "お電話、またはメールでのお問い合わせはこちらからどうぞ。【電話受付】とんきゅう株式会社本部 受付時間 平日 ９時〜18時",
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content:
+            "お電話、またはメールでのお問い合わせはこちらからどうぞ。【電話受付】とんきゅう株式会社本部 受付時間 平日 ９時〜18時",
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `${process.env.BASE_URL}/contact`,
+        },
+      ],
+    };
+  },
   layout() {
     return "main";
   },
@@ -410,11 +437,10 @@ export default {
     //初回訪問時　トークン発行
     async fetchToken() {
       if (!navigator.cookieEnabled) {
-        this.cookieCheck = false
-        return false
+        this.cookieCheck = false;
+        return false;
       }
       await this.$store.dispatch("mail/fetchToken");
-
     },
     //メール送信完了　サンクス画面表示
     success() {

@@ -88,6 +88,23 @@ const actions = {
         commit("SET_POST_DATA", data);
     },
 
+    //【GET】店舗の最新ニュース ３件取得
+    async fetchCurrentNewsOfShop({ commit }, shopId) {
+        let response = null;
+        try {
+            response = await axios.get(
+                `${process.env.API_NEWS_BASE_URL}/posts/current/${shopId}`
+            );
+        } catch (err) {
+            commit("SET_ERROR_MESSAGE", 'データを取得できませんでした。時間をおいて再度お試しください');
+            return false
+        }
+
+        let data = response.data;
+
+        commit("SET_POST_DATA", data);
+    },
+
     //【POST,PUT】ニュース記事送信 作成＆編集
     async sendArticle({ rootState, commit }, data) {
         const AuthHeader = `Bearer ${rootState.user.token}`;

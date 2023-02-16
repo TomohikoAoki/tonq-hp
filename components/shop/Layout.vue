@@ -1,9 +1,12 @@
 <template>
   <div>
-    <div class="shop-wrap" v-if="mounted">
+    <div class="shop-wrap">
       <ShopTopVue :shopData="shopData"></ShopTopVue>
       <WrapCalendarVue :shopData="shopData" class="calendar" v-if="shopData.calendar"></WrapCalendarVue>
-      <ShopNavVue></ShopNavVue>
+      <div class="shop-news">
+        <NewsAreaVue :shopId="shopData.id"></NewsAreaVue>
+      </div>
+      <ShopNavVue class="shop-nav"></ShopNavVue>
       <div class="shop-bottom-layout">
         <ShopInfoVue :shopData="shopData" class="info"></ShopInfoVue>
         <ShopLinkVue class="link" :shopData="shopData"></ShopLinkVue>
@@ -18,6 +21,7 @@ import ShopNavVue from "./Nav.vue";
 import WrapCalendarVue from "./WrapCalendar.vue";
 import ShopInfoVue from "./Info.vue";
 import ShopLinkVue from "./Link.vue";
+import NewsAreaVue from "../news/CurrentNewsList.vue"
 
 export default {
   components: {
@@ -26,21 +30,11 @@ export default {
     WrapCalendarVue,
     ShopInfoVue,
     ShopLinkVue,
+    NewsAreaVue
   },
   props:[
     "shopData"
   ],
-  data() {
-    return {
-      mounted: false
-    }
-  },
-
-  created() {
-    if (this.shopData) {
-      this.mounted = true
-    }
-  }
 };
 </script>
 
@@ -79,5 +73,12 @@ export default {
       margin: 30px auto;
     }
   }
+}
+.shop-news {
+  background-color: rgb(245, 243, 240);
+  margin: 50px 0 0 0;
+}
+.shop-nav {
+  padding: 50px 0 50px 0;
 }
 </style>

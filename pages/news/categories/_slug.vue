@@ -6,7 +6,7 @@
         <h2 class="news-list__title">
           {{ $generateShopLabels(shopId, "name") }}のニュース一覧
         </h2>
-        <Loading ref="loading" class="loading"></Loading>
+        <Loading v-if="!postData && !errorMessage" class="loading"></Loading>
         <div v-if="postData">
           <List :postData="postData.news_data"></List>
           <Pagination
@@ -42,6 +42,24 @@ export default {
   layout() {
     return "main"
   },
+  head() {
+    return {
+      title: `とんＱ${this.$generateShopLabels(this.shopId, "name")}のニュース一覧`,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content:
+            `とんＱ${this.$generateShopLabels(this.shopId, "name")}のニュース一覧です。`,
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `${process.env.BASE_URL}/${this.$generateShopLabels(this.shopId)}`,
+        },
+      ],
+    };
+  },
   components: {
     Categories,
     NewsHeader,
@@ -57,12 +75,10 @@ export default {
   },
   methods: {
     async fetchNewsByShop(shopId, page = null) {
-      this.$refs.loading.start();
       await this.$store.dispatch("news/fetchNewsByShop", {
         shopId: shopId,
         page: page,
       });
-      if (this.$refs.loading) this.$refs.loading.finish();
     },
     fetchPage(n) {
       this.page = Number(n);
@@ -72,7 +88,7 @@ export default {
       });
     },
   },
-  mounted() {
+  created() {
     let slug = this.$route.params.slug;
     this.shopId = this.$generateShopLabels(slug);
     this.page = this.$route.query.page ? this.$route.query.page : 1;

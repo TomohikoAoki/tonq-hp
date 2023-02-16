@@ -42,6 +42,30 @@ export default {
   layout() {
     return 'main'
   },
+  head() {
+    return {
+      title: "とんＱのグランドメニュー -Ground Menu-",
+      meta: [
+        { hid: "og:title", property: "og:title", content: "グランドメニュー" },
+        {
+          hid: "description",
+          name: "description",
+          content: `とんＱのグランドメニューです`,
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content:
+            "とんＱのグランドメニューです",
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `${process.env.BASE_URL}/menu/ground`,
+        },
+      ],
+    };
+  },
   computed: {
     currentComponent() {
       return this.ArrayComponents[this.current];

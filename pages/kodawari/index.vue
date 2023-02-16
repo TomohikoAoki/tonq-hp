@@ -225,10 +225,35 @@
 
 <script>
 export default {
-layout() {
-    return 'main'
-  }
-}
+  layout() {
+    return "main";
+  },
+  head() {
+    return {
+      title: "とんＱのこだわり -Our Advantage-",
+      meta: [
+      { hid: "og:title", property: "og:title", content: "とんＱのこだわり" },
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "とんきゅう株式会社の掲げるQuest for Quality(品質の追求)。ここではとんかつとんＱのこだわりをご紹介。とんかつで使う国産ブランドやまと豚や、ご飯、味噌汁、そして接客のこだわりまで。",
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content:
+            "とんきゅう株式会社の掲げるQuest for Quality(品質の追求)。ここではとんかつとんＱのこだわりをご紹介。とんかつで使う国産ブランドやまと豚や、ご飯、味噌汁、そして接客のこだわりまで。",
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `${process.env.BASE_URL}/kodawari`,
+        },
+      ],
+    };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

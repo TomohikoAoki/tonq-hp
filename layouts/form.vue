@@ -23,7 +23,13 @@ export default {
     return {
       title:'フォーム',
       meta: [
-        { hid: 'http-equiv', name: 'http-equiv', content: 'no-cache' }
+        { hid: 'http-equiv', name: 'http-equiv', content: 'no-cache' },
+        {
+          hid: "robots",
+          name: "robots",
+          content:
+            "noindex,nofollow",
+        },
       ]
     }
   }

@@ -78,6 +78,30 @@ export default {
   layout() {
     return 'main'
   },
+  head() {
+    return {
+      title: "とんＱのランチ -Lunch Menu-",
+      meta: [
+        { hid: "og:title", property: "og:title", content: "とんＱのランチ" },
+        {
+          hid: "description",
+          name: "description",
+          content: `とんＱのランチメニュー。平日・土曜日の１１時から１５時までのランチタイムでご提供しております。`,
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content:
+            "とんＱのランチメニュー。平日・土曜日の１１時から１５時までのランチタイムでご提供しております。",
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `${process.env.BASE_URL}/menu/lunch`,
+        },
+      ],
+    };
+  },
 }
 </script>
 

@@ -137,6 +137,30 @@ export default {
   layout() {
     return 'main'
   },
+  head() {
+    return {
+      title: "とんＱのお品書き -Menu-",
+      meta: [
+        { hid: "og:title", property: "og:title", content: "とんＱのお品書き" },
+        {
+          hid: "description",
+          name: "description",
+          content: `とんＱがこだわるのはお膳の五品（とんかつ・ご飯・味噌汁・キャベツ・お新香）！国産ブランドやまと豚を使ったとんかつは勿論のこと、ご飯のお米や炊き方、味噌汁の味噌や椀種、キャベツ、お新香にいたるまで、お膳にある料理全てで、季節感を感じていただき、こだわりを持ってご提供しております。`,
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content:
+            "とんＱがこだわるのはお膳の五品（とんかつ・ご飯・味噌汁・キャベツ・お新香）！国産ブランドやまと豚を使ったとんかつは勿論のこと、ご飯のお米や炊き方、味噌汁の味噌や椀種、キャベツ、お新香にいたるまで、お膳にある料理全てで、季節感を感じていただき、こだわりを持ってご提供しております。",
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `${process.env.BASE_URL}/menu`,
+        },
+      ],
+    };
+  },
   components: {
     NaviVue,
   },

@@ -14,6 +14,18 @@ export default {
   layout() {
     return "main";
   },
+  head() {
+    return {
+      title: "エラー画面",
+      meta: [
+        {
+          hid: "robots",
+          name: "robots",
+          content: "noindex,nofollow",
+        },
+      ],
+    };
+  },
   computed: {
     ...mapGetters({
       message: "error/getErrorMessage",

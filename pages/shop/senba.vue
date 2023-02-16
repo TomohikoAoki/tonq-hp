@@ -1,31 +1,13 @@
 <template>
   <div>
-    <div class="shop-wrap" v-if="mounted">
-      <ShopTopVue :shopData="filteredShopData"></ShopTopVue>
-      <WrapCalendarVue
-        :shopData="filteredShopData"
-        class="calendar"
-        v-if="filteredShopData.calendar"
-      ></WrapCalendarVue>
-      <ShopNavVue></ShopNavVue>
-      <div class="shop-bottom-layout">
-        <ShopInfoVue :shopData="filteredShopData" class="info"></ShopInfoVue>
-        <ShopLinkVue class="link" :shopData="filteredShopData"></ShopLinkVue>
-      </div>
-    </div>
+    <ShopLayout v-if="mounted" :shopData="filteredShopData"></ShopLayout>
   </div>
 </template>
 
 <script>
-import ShopTopVue from "../../components/shop/Top.vue";
-import ShopNavVue from "../../components/shop/Nav.vue";
-import WrapCalendarVue from "../../components/shop/WrapCalendar.vue";
-import ShopInfoVue from "../../components/shop/Info.vue";
-import ShopLinkVue from "../../components/shop/Link.vue";
+import ShopLayout from "../../components/shop/Layout.vue";
 
 import { mapGetters } from "vuex";
-
-import '~/assets/css/shop-common.scss'
 
 export default {
   data() {
@@ -41,11 +23,7 @@ export default {
     return this.$generateJsonLd(this.shopId)
   },
   components: {
-    ShopTopVue,
-    ShopNavVue,
-    WrapCalendarVue,
-    ShopInfoVue,
-    ShopLinkVue,
+    ShopLayout
   },
   layout() {
     return "main";
@@ -58,7 +36,13 @@ export default {
       return this.shopData.find((item) => item.id === this.shopId);
     },
   },
+  methods: {
+    async fetchCurrentNewsOfShop(id) {
+      await this.$store.dispatch('news/fetchCurrentNewsOfShop', id)
+    }
+  },
   created() {
+    this.fetchCurrentNewsOfShop(this.shopId)
     if (this.shopData) {
       this.mounted = true;
     }
@@ -66,40 +50,3 @@ export default {
 };
 </script>
 
-
-.shop-wrap {
-  padding-bottom: 50px;
-}
-
-.calendar {
-  margin: 30px auto 40px auto;
-}
-.shop-bottom-layout {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  max-width: 1300px;
-  width: 95%;
-  margin: 0 auto;
-  @media screen and (max-width: 1000px) {
-    display: block;
-  }
-  .info {
-    width: 70%;
-    max-width: 900px;
-    flex: 1;
-    margin-right: 30px;
-    @media screen and (max-width: 1000px) {
-      width: 95%;
-      margin: 0 auto;
-    }
-  }
-  .link {
-    width: 350px;
-    @media screen and (max-width: 1000px) {
-      width: 90%;
-      margin: 30px auto;
-    }
-  }
-}
-</style>

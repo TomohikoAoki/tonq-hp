@@ -3,7 +3,7 @@
     <NewsHeader></NewsHeader>
     <div class="news-contents-area">
       <div class="news-side-column column-left">
-        <Loading ref="loading"></Loading>
+        <Loading v-if="!postData && !errorMessage" class="loading"></Loading>
         <div v-if="postData" class="article">
           <div class="article-header">
             <div class="article-date">
@@ -14,7 +14,6 @@
           <div class="article-content" v-html="postData.content"></div>
         </div>
         <div v-else-if="errorMessage">{{ errorMessage }}</div>
-        <div class="news-side-column"></div>
       </div>
       <div class="news-side-column column-right">
         <Categories></Categories>
@@ -24,9 +23,9 @@
 </template>
 
 <script>
-import Categories from "../../../components/news/Categories.vue"
-import NewsHeader from "../../../components/news/Header.vue"
-import Loading from "../../../components/LoadingArticle.vue"
+import Categories from "../../../components/news/Categories.vue";
+import NewsHeader from "../../../components/news/Header.vue";
+import Loading from "../../../components/LoadingArticle.vue";
 
 import { mapGetters } from "vuex";
 
@@ -34,42 +33,59 @@ export default {
   components: {
     Categories,
     NewsHeader,
-    Loading
+    Loading,
   },
   layout() {
-    return "main"
+    return "main";
+  },
+  head() {
+    return {
+      title: 'とんＱニュース'
+    };
   },
   computed: {
     ...mapGetters({
-      postData: 'news/getPostData',
-      errorMessage: 'news/getErrorMessage',
-    })
+      postData: "news/getPostData",
+      errorMessage: "news/getErrorMessage",
+    }),
   },
   methods: {
     async fetchArticle(id) {
-      this.$refs.loading.start()
-      await this.$store.dispatch('news/fetchPost', id)
-      this.$refs.loading.finish()
+      await this.$store.dispatch("news/fetchPost", id);
     },
   },
-  mounted() {
+  async created() {
     const id = this.$route.params.id;
-    this.fetchArticle(id);
+    await this.fetchArticle(id);
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .news-contents-area {
   display: flex;
   max-width: 1360px;
   width: 95%;
-  min-height: 60vh;
   margin: 0 auto;
   .column-left {
     width: 70%;
+    position: relative;
+    min-height: 60vh;
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%), translateY(-50%);
+    }
+    .error-message {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: center;
+      width: 100%;
+    }
   }
+
   .column-right {
     width: 28%;
   }

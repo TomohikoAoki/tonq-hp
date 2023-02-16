@@ -4,7 +4,7 @@
     <div class="news-contents-area">
       <div class="news-side-column column-left">
         <h2 class="news-list__title">ニュース一覧</h2>
-        <Loading ref="loading" class="loading"></Loading>
+        <Loading class="loading" v-if="!postData && !errorMessage"></Loading>
         <div v-if="postData">
           <List :postData="postData.news_data"></List>
           <Pagination
@@ -36,6 +36,30 @@ export default {
       page: null,
     };
   },
+  head() {
+    return {
+      title: "とんＱ最新情報 -News-",
+      meta: [
+        { hid: "og:title", property: "og:title", content: "とんＱの最新情報" },
+        {
+          hid: "description",
+          name: "description",
+          content: `メニューの変更やフェア、営業時間の変更などとんＱの最新情報をお届けします。`,
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content:
+            "メニューの変更やフェア、営業時間の変更などとんＱの最新情報をお届けします。",
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `${process.env.BASE_URL}/news`,
+        },
+      ],
+    };
+  },
   components: {
     Categories,
     NewsHeader,
@@ -54,9 +78,7 @@ export default {
   },
   methods: {
     async fetchNews(page = null) {
-      this.$refs.loading.start();
       await this.$store.dispatch("news/fetchNews", page);
-      if (this.$refs.loading) this.$refs.loading.finish();
     },
     fetchPage(n) {
       this.page = Number(n);
@@ -66,7 +88,7 @@ export default {
       });
     },
   },
-  mounted() {
+  created() {
     this.page = this.$route.query.page ? this.$route.query.page : 1;
     this.fetchNews(this.page);
   },
