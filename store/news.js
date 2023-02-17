@@ -35,24 +35,28 @@ const actions = {
             return false
         }
 
-        let data = response.data;
+        let data = response.data.data;
 
         commit("SET_POST_DATA", data);
     },
 
     //【GET】ニュース一覧取得 店舗別
-    async fetchNewsByShop({ commit }, args) {
+    async fetchNewsByShop({ commit, dispatch }, args) {
         let response = null;
         try {
             response = await axios.get(
                 `${process.env.API_NEWS_BASE_URL}/posts/shop/${args.shopId}?page=${args.page}`
             );
         } catch (err) {
+            if (err.response.status === 404) {
+                dispatch("error/catchError", err.response, { root: true });
+                return false
+            }
             commit("SET_ERROR_MESSAGE", 'データを取得できませんでした。時間をおいて再度お試しください');
             return false
         }
 
-        let data = response.data;
+        let data = response.data.data;
 
         commit("SET_POST_DATA", data);
     },
@@ -65,42 +69,29 @@ const actions = {
                 `${process.env.API_NEWS_BASE_URL}/articles/${id}`
             );
         } catch (err) {
+            if (err.response.status === 404) {
+                this.$router.push('error/400')
+                return false
+            }
             commit("SET_ERROR_MESSAGE", err.response.data);
             return false
         }
-        commit("SET_POST_DATA", response.data);
+        commit("SET_POST_DATA", response.data.data);
     },
 
-    //【GET】ニュース最新public ３件取得
-    async fetchCurrentNews({ commit }) {
+    //【GET】ニュース最新 ３件取得
+    async fetchCurrentNews({ commit }, shopId = null) {
         let response = null;
+        let url = `${process.env.API_NEWS_BASE_URL}/posts/current`
+        url += shopId ? `/${shopId}` : ""
         try {
-            response = await axios.get(
-                `${process.env.API_NEWS_BASE_URL}/posts/current`
-            );
+            response = await axios.get(`${url}`);
         } catch (err) {
             commit("SET_ERROR_MESSAGE", 'データを取得できませんでした。時間をおいて再度お試しください');
             return false
         }
 
-        let data = response.data;
-
-        commit("SET_POST_DATA", data);
-    },
-
-    //【GET】店舗の最新ニュース ３件取得
-    async fetchCurrentNewsOfShop({ commit }, shopId) {
-        let response = null;
-        try {
-            response = await axios.get(
-                `${process.env.API_NEWS_BASE_URL}/posts/current/${shopId}`
-            );
-        } catch (err) {
-            commit("SET_ERROR_MESSAGE", 'データを取得できませんでした。時間をおいて再度お試しください');
-            return false
-        }
-
-        let data = response.data;
+        let data = response.data.data;
 
         commit("SET_POST_DATA", data);
     },

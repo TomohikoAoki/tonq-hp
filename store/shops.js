@@ -517,6 +517,14 @@ const getters = {
         })
 
         return data
+    },
+    getSlugs: (state) => {
+        let data = []
+        state.shopData.forEach((item) => {
+            data.push(item.slug)
+        })
+
+        return data
     }
 };
 

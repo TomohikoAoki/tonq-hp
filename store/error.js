@@ -23,7 +23,7 @@ const mutations = {
 
 const actions = {
     catchError({ commit }, response) {
-        commit("clearMessage");
+        commit("clearState");
         if (500 <= response.status) {
             commit("setCode", response.status);
             commit("setMessage", response.data);

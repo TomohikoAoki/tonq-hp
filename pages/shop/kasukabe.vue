@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     async fetchCurrentNewsOfShop(id) {
-      await this.$store.dispatch('news/fetchCurrentNewsOfShop', id)
+      await this.$store.dispatch('news/fetchCurrentNews', id)
     }
   },
   created() {

@@ -9,11 +9,16 @@
 </template>
 
 <script>
-import Loading from '../components/Loading.vue'
+import Loading from "../components/Loading.vue";
 
 export default {
   components: {
-    Loading
+    Loading,
+  },
+
+  layoutTransition: {
+    name: "layout",
+    mode: "out-in",
   },
 };
 </script>

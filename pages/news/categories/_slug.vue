@@ -33,6 +33,10 @@ import Pagination from "../../../components/news/Pagination2.vue";
 import { mapGetters } from "vuex";
 
 export default {
+  validate({ params, store }) {
+    const slugs = store.getters["shops/getSlugs"];
+    return slugs.includes(params.slug);
+  },
   data() {
     return {
       shopId: null,
@@ -40,22 +44,29 @@ export default {
     };
   },
   layout() {
-    return "main"
+    return "main";
   },
   head() {
     return {
-      title: `とんＱ${this.$generateShopLabels(this.shopId, "name")}のニュース一覧`,
+      title: `とんＱ${this.$generateShopLabels(
+        this.shopId,
+        "name"
+      )}のニュース一覧`,
       meta: [
         {
           hid: "description",
           name: "description",
-          content:
-            `とんＱ${this.$generateShopLabels(this.shopId, "name")}のニュース一覧です。`,
+          content: `とんＱ${this.$generateShopLabels(
+            this.shopId,
+            "name"
+          )}のニュース一覧です。`,
         },
         {
           hid: "og:url",
           property: "og:url",
-          content: `${process.env.BASE_URL}/${this.$generateShopLabels(this.shopId)}`,
+          content: `${process.env.BASE_URL}/${this.$generateShopLabels(
+            this.shopId
+          )}`,
         },
       ],
     };
@@ -128,7 +139,7 @@ export default {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translateX(-50%),translateY(-50%);
+        transform: translateX(-50%), translateY(-50%);
       }
       .error-message {
         position: absolute;
@@ -143,5 +154,4 @@ export default {
     }
   }
 }
-
 </style>

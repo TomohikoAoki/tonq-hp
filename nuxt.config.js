@@ -113,4 +113,13 @@ export default {
             },
         },
     },
+    router: {
+        extendRoutes(routes, resolve) {
+            routes.push({
+                name: '404error',
+                path: '*',
+                component: resolve(__dirname, 'pages/error/400.vue')
+            })
+        }
+    }
 };

@@ -30,6 +30,14 @@ import Loading from "../../../components/LoadingArticle.vue";
 import { mapGetters } from "vuex";
 
 export default {
+  validate({ params }) {
+      return /^[1-9][0-9]*$/.test(params.id)
+  },
+  data() {
+    return {
+      postId: null,
+    };
+  },
   components: {
     Categories,
     NewsHeader,
@@ -40,7 +48,7 @@ export default {
   },
   head() {
     return {
-      title: 'とんＱニュース'
+      title: `とんＱニュース ${this.postId}号`,
     };
   },
   computed: {
@@ -55,8 +63,8 @@ export default {
     },
   },
   async created() {
-    const id = this.$route.params.id;
-    await this.fetchArticle(id);
+    this.postId = this.$route.params.id;
+    await this.fetchArticle(this.postId);
   },
 };
 </script>
@@ -67,6 +75,7 @@ export default {
   max-width: 1360px;
   width: 95%;
   margin: 0 auto;
+  padding-bottom: 40px;
   .column-left {
     width: 70%;
     position: relative;
@@ -91,6 +100,7 @@ export default {
   }
 }
 .article {
+  padding-bottom: 40px;
   .article-header {
     border-bottom: 1px solid;
     padding: 2em 0;
