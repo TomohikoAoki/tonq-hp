@@ -65,12 +65,13 @@
       </nuxt-link>
     </div>
     <CurrentNewsVue></CurrentNewsVue>
-    <div class="link-area"></div>
+    <BannerVue></BannerVue>
   </div>
 </template>
 
 <script>
 import CurrentNewsVue from "../components/news/CurrentNewsList.vue";
+import BannerVue from "../components/common/banner.vue"
 import { mapGetters } from "vuex";
 
 export default {
@@ -80,6 +81,7 @@ export default {
   },
   components: {
     CurrentNewsVue,
+    BannerVue,
   },
   computed: {
     ...mapGetters({
@@ -112,6 +114,7 @@ export default {
 <style lang="scss" scoped>
 .top {
   position: relative;
+  padding-bottom: 30px;
 }
 
 .header-nav {

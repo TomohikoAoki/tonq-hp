@@ -42,12 +42,13 @@
     <div id="contact_button">
       <nuxt-link to="/contact/"
         ><i class="fa fa-phone" aria-hidden="true"></i
-        ><i class="fa fa-envelope" aria-hidden="true"></i>お問い合わせ</nuxt-link
+        ><i class="fa fa-envelope" aria-hidden="true"></i
+        >お問い合わせ</nuxt-link
       >
     </div>
-    <nav id="othershop">
-      <div class="othershop__title"><span>とんきゅうグループ</span></div>
-      <ul class="othershop__list">
+    <nav id="other-shop">
+      <div class="other-shop__title"><span>とんきゅうグループ</span></div>
+      <ul class="other-shop__list">
         <li id="tonkyu">
           <a href="http://ton-kyu.com/" class="lazyload">とんきゅう株式会社</a>
         </li>
@@ -69,7 +70,7 @@
     <div class="bottom">
       <ul>
         <li>
-          <a href="http://ton-q.com/privacy/index.html">個人情報保護方針</a>
+          <nuxt-link to="/privacy">個人情報保護方針</nuxt-link>
         </li>
       </ul>
       <small>Copyright &copy; 2006 &#126; TON-Q All Rights Reserved.</small>
@@ -79,8 +80,7 @@
 
 <script>
 export default {
-}
-
+};
 </script>
 
 <style lang="scss">
@@ -179,10 +179,10 @@ export default {
 
 /*other shop------------------------*/
 
-#othershop {
+#other-shop {
   width: 90%;
   margin: 40px auto 30px auto;
-  .othershop__title {
+  .other-shop__title {
     margin: 0 auto 20px auto;
     padding: 0;
     font-size: 100%;
@@ -203,7 +203,7 @@ export default {
       margin-bottom: 10px;
     }
   }
-  .othershop__list {
+  .other-shop__list {
     list-style: none;
     margin: 0 auto;
     padding: 0;
@@ -230,9 +230,31 @@ export default {
         height: 0;
         padding-top: 50px;
         background-repeat: no-repeat;
+        background-image: url(~static/image/common/footer/footer-link.gif);
+        filter: brightness(80%);
+        transition: filter 0.2s ease-in-out;
         &:hover {
-          filter: brightness(90%);
+          filter: brightness(100%);
         }
+      }
+      &#tonkyu a {
+        background-position: 0 0;
+      }
+
+      &#tonq a {
+        background-position: -130px 0px;
+      }
+
+      &#akaushi a {
+        background-position: -260px 0px;
+      }
+
+      &#arzonie a {
+        background-position: -390px 0;
+      }
+
+      &#meat-factory a {
+        background-position: -520px 0;
       }
     }
   }
@@ -256,9 +278,5 @@ export default {
 
 #meat-factory a {
   background-position: -520px 0;
-}
-
-#news article div p span {
-  color: #c00;
 }
 </style>
