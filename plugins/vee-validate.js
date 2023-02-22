@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { ValidationProvider, extend, ValidationObserver, localize } from 'vee-validate/dist/vee-validate'
-import { required, email, max, confirmed } from 'vee-validate/dist/rules'
+import { required, email, max, confirmed, image, ext } from 'vee-validate/dist/rules'
 import ja from 'vee-validate/dist/locale/ja.json'
 import { setInteractionMode } from 'vee-validate/dist/vee-validate';
 
@@ -8,6 +8,8 @@ extend('required', required);
 extend('email', email)
 extend('max', max)
 extend('confirmed', confirmed)
+extend('image', image)
+extend('ext', ext)
 extend('zipCode', value => {
     return /^[0-9]{7}$/.test(value) ? true : '半角数字で7桁の数字で入力してください。';
 })
@@ -28,7 +30,8 @@ localize({
             address: '住所',
             shop: '店舗',
             content: 'お問い合わせ内容',
-            password: 'パスワード'
+            password: 'パスワード',
+            thumb_nail:'サムネイル画像',
         },
         messages: {
             email: 'メールアドレスの形式が有効でありません。',

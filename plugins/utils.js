@@ -90,7 +90,7 @@ export default ({ store }, inject) => {
                     content: data.description,
                 },
                 //{ hid: "og:image", property: "og:image", content: "画像のURL" },
-                //{ name: "twitter:card", content: "summary" }, //　twitterの画像サイズ
+                { name: "twitter:card", content: "summary" }, //　twitterの画像サイズ
             ],
         };
     };

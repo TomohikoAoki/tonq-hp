@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <div class="form-wrap">
     <Confirm>Edit Complete!</Confirm>
+    <h1 class="form-wrap__title">EDIT NEWS<span>ニュース編集</span></h1>
     <div v-if="error">{{ error }}</div>
-    <FormTemplateVue :article="postData" @sendData="sendData" v-show="postData"></FormTemplateVue>
+    <FormTemplateVue :article="postData" @sendData="sendData" v-show="postData" class="form-area"></FormTemplateVue>
   </div>
 </template>
 
@@ -16,7 +17,7 @@ export default {
   data() {
     return {
       mode: 'edit',
-      articleId:null,
+      articleId: null,
     }
   },
   components: {
@@ -50,5 +51,29 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.form-wrap {
+  background-color: #333;
+  padding:40px 0;
+  min-height: calc(100vh - 80px);
+  &__title {
+    text-align: center;
+    font-family: Alata;
+    font-size: 2.3em;
+    color:#989898;
+    line-height: 1em;
+    padding: 0.3em 0 1.3em 0;
+    span {
+      font-size: 0.6em;
+      display: inline-block;
+      width: 100%;
+      &::before, &::after {
+        content: "-";
+      }
+    }
+  }
+  .form-area {
+    max-width:1000px;
+  }
+}
 </style>

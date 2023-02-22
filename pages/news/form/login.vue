@@ -128,8 +128,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.login-form {
-  margin: 0 auto;
-  max-width: 1400px;
+
+.login {
+  background-color: #333;
+  padding:40px 0;
+  min-height: calc(100vh - 80px);
+  position: relative;
+  .login-form {
+    max-width:1000px;
+    width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
 }
 </style>

@@ -19,6 +19,7 @@ $input-base-width-md: $content-base-width - 140px !default;
 $input-base-width-sm: $content-base-width - 340px !default;
 .form {
     background-color: var(--white-color-secondary);
+    border-radius: 10px;
     margin: 0 auto;
     @media screen and (min-width: 0) {
         font-size: 0.75rem;

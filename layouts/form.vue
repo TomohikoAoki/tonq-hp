@@ -1,17 +1,17 @@
 <template>
-    <div class="layout-form">
-      <Loading></Loading>
-      <LayoutPartsFormHeader></LayoutPartsFormHeader>
-      <main>
-        <Nuxt />
-      </main>
-      <LayoutPartsFormFooter></LayoutPartsFormFooter>
-    </div>
-  </template>
+  <div class="layout-form">
+    <Loading></Loading>
+    <LayoutPartsFormHeader></LayoutPartsFormHeader>
+    <main>
+      <Nuxt />
+    </main>
+    <LayoutPartsFormFooter></LayoutPartsFormFooter>
+  </div>
+</template>
 
-  <script>
+<script>
 
-  import Loading from '../components/Loading.vue'
+import Loading from '../components/Loading.vue'
 
 
 export default {
@@ -21,7 +21,7 @@ export default {
   middleware: 'AuthMiddleware',
   head() {
     return {
-      title:'フォーム',
+      title: 'フォーム',
       meta: [
         { hid: 'http-equiv', name: 'http-equiv', content: 'no-cache' },
         {
@@ -30,7 +30,10 @@ export default {
           content:
             "noindex,nofollow",
         },
-      ]
+      ],
+      bodyAttrs: {
+        class: 'form-body'
+      }
     }
   }
 }
@@ -39,5 +42,6 @@ export default {
 <style scoped lang="scss">
 .layout-form {
   position: relative;
+
 }
 </style>

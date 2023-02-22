@@ -15,7 +15,6 @@ export default {
   components: {
     Loading,
   },
-
   layoutTransition: {
     name: "layout",
     mode: "out-in",

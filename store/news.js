@@ -4,6 +4,7 @@ const state = () => ({
     successFlag: false,
     postData: null,
     errorMessage: null,
+    invalidMessage: null,
 });
 
 const mutations = {
@@ -20,6 +21,9 @@ const mutations = {
     SET_ERROR_MESSAGE(state, message) {
         state.errorMessage = message;
     },
+    SET_INVALID_MESSAGE(state, message) {
+        state.invalidMessage = message
+    }
 };
 
 const actions = {
@@ -48,10 +52,6 @@ const actions = {
                 `${process.env.API_NEWS_BASE_URL}/posts/shop/${args.shopId}?page=${args.page}`
             );
         } catch (err) {
-            if (err.response.status === 404) {
-                dispatch("error/catchError", err.response, { root: true });
-                return false
-            }
             commit("SET_ERROR_MESSAGE", 'データを取得できませんでした。時間をおいて再度お試しください');
             return false
         }
@@ -115,7 +115,7 @@ const actions = {
             } catch (err) {
                 $nuxt.$loading.finish();
                 if (err.response.status === 422) {
-                    console.log("画像アップロード失敗", err.response.data);
+                    commit('SET_INVALID_MESSAGE', err.response.data)
                 }
 
                 return false;
@@ -148,18 +148,32 @@ const actions = {
                 },
             });
         } catch (err) {
-            $nuxt.$loading.finish();
+            let res = null
             if (err.response.status === 422) {
-                //画像削除の処理が入れれたらgood!
-                console.log("フォームアップロード失敗", err.response.data);
+                //画像をアップしていた場合、画像削除
+                if (data.imageData) {
+                    res = await axios({
+                        method: 'DELETE',
+                        url: `${postImageUrl}/delete`,
+                        data: { file_name: data.formData["thumb_filename"] },
+                        headers: {
+                            Authorization: AuthHeader,
+                            "Content-Type": "application/json",
+                        },
+                    })
+                }
+                console.log(res)
+                commit('SET_INVALID_MESSAGE', err.response.data)
             }
 
+            $nuxt.$loading.finish();
             return false;
-        }
 
+        }
         $nuxt.$loading.finish();
         commit("SET_SUCCESS_FLAG", true);
         console.log("すべて成功");
+
     },
 
     //【DELETE】ニュース記事削除
@@ -180,21 +194,22 @@ const actions = {
             $nuxt.$loading.finish();
         }
     },
-    changeSuccessFlag(context) {
-        context.commit("SET_SUCCESS_FLAG");
-    },
-    clearPostData({ commit }) {
-        commit("CLEAR_POST_DATA");
-    },
-    clearErrorMessage({ commit }) {
-        commit('SET_ERROR_MESSAGE', null)
-    }
+        changeSuccessFlag(context) {
+    context.commit("SET_SUCCESS_FLAG");
+},
+clearPostData({ commit }) {
+    commit("CLEAR_POST_DATA");
+},
+clearErrorMessage({ commit }) {
+    commit('SET_ERROR_MESSAGE', null)
+}
 };
 
 const getters = {
     getSuccessFlag: (state) => state.successFlag,
     getPostData: (state) => state.postData,
     getErrorMessage: (state) => state.errorMessage,
+    getInvalidMessage: (state) => state.invalidMessage,
 };
 
 export default {

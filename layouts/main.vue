@@ -16,6 +16,10 @@ export default {
   components: {
     Loading
   },
+  layoutTransition: {
+    name: "layout",
+    mode: "out-in",
+  },
   mounted() {
     const element = document.getElementById("footer");
     const handler = (entries) => {
