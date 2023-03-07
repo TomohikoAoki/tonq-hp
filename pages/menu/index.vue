@@ -139,7 +139,7 @@ export default {
   },
   head() {
     return {
-      title: "とんＱのお品書き -Menu-",
+      title: "お品書き -Menu-",
       meta: [
         { hid: "og:title", property: "og:title", content: "とんＱのお品書き" },
         {

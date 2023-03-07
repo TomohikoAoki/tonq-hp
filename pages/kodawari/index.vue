@@ -230,7 +230,7 @@ export default {
   },
   head() {
     return {
-      title: "とんＱのこだわり -Our Advantage-",
+      title: "こだわり -Our Advantage-",
       meta: [
       { hid: "og:title", property: "og:title", content: "とんＱのこだわり" },
         {

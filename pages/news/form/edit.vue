@@ -1,6 +1,6 @@
 <template>
   <div class="form-wrap">
-    <Confirm>Edit Complete!</Confirm>
+    <Confirm backTo="referrer">Edit Complete!</Confirm>
     <h1 class="form-wrap__title">EDIT NEWS<span>ニュース編集</span></h1>
     <div v-if="error">{{ error }}</div>
     <FormTemplateVue :article="postData" @sendData="sendData" v-show="postData" class="form-area"></FormTemplateVue>

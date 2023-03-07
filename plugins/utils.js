@@ -62,7 +62,7 @@ export default ({ store }, inject) => {
         let data = shops.find((item) => item.id === shopId);
 
         return {
-            title: data.name,
+            title: data.name.replace('とんかつとんＱ', ""),
             meta: [{
                     hid: "description",
                     name: "description",

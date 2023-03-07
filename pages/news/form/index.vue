@@ -1,6 +1,8 @@
 <template>
   <div class="top">
-    <Confirm>Delete Complete!</Confirm>
+    <Confirm :backTo="generateBackToConfirmed" @fetchNews="fetchNews(page)" @fetchPage="fetchPage(page - 1)">
+      Delete Complete!
+    </Confirm>
     <h1 class="form-top-title">FORM TOP<span>フォームトップ</span></h1>
     <nuxt-link to="create">
       <div class="btn-create">ニュース新規作成</div>
@@ -41,6 +43,7 @@ export default {
   data() {
     return {
       page: null,
+      backToConfirmed: null,
     };
   },
   layout() {
@@ -56,16 +59,28 @@ export default {
       postData: "news/getPostData",
       error: 'news/getErrorMessage',
     }),
+    generateBackToConfirmed() {
+      if (this.postData && this.page) {
+        if (1 < this.postData.news_data.length) {
+          return 'fetch'
+        }
+        if (1 < this.page) {
+          return 'prevPage'
+        }
+        return 'top'
+      }
+      return null
+    },
   },
   methods: {
     //記事削除
     async pushDelete(id) {
-      if (window.confirm("delete OK?")) {
+      //if (window.confirm("delete OK?")) {
         $nuxt.$loading.start();
         await this.$store.dispatch("news/deleteArticle", id);
         return false;
-      }
-      return false;
+      //}
+     //return false;
     },
     toDetail(id) {
       this.$router.push(`/news/form/edit?id=${id}`)
@@ -82,7 +97,7 @@ export default {
       });
     },
   },
-  created() {
+  fetch() {
     this.page = this.$route.query.page ? this.$route.query.page : 1;
     this.fetchNews(this.page);
   },
@@ -95,7 +110,8 @@ export default {
     }
     next();
   },
-};
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -109,14 +125,17 @@ export default {
     text-align: center;
     font-family: Alata;
     font-size: 2.3em;
-    color:#989898;
+    color: #989898;
     line-height: 1em;
     padding: 0.3em 0 1.3em 0;
+
     span {
       font-size: 0.6em;
       display: inline-block;
       width: 100%;
-      &::before, &::after {
+
+      &::before,
+      &::after {
         content: "-";
       }
     }
@@ -140,6 +159,7 @@ export default {
     background-color: #fff;
     border-radius: 10px;
     padding: 2%;
+
     .title-list {
       font-weight: bold;
       color: #999;

@@ -48,7 +48,7 @@ export default {
   },
   head() {
     return {
-      title: `とんＱ${this.$generateShopLabels(
+      title: `${this.$generateShopLabels(
         this.shopId,
         "name"
       )}のニュース一覧`,

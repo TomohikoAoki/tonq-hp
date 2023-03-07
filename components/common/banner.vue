@@ -2,14 +2,14 @@
   <div class="banner">
     <nav class="banner-link">
       <ul class="banner-link__list">
-        <li class="recruit">
+        <li class="qcard banner-item" v-if="!hideFlags || !hideFlags.includes('qcard')">
           <nuxt-link to="/q-card"
             ><img
               src="~assets/image/common/banner/bnr-qcard.gif"
               alt="Ｑカード"
           /></nuxt-link>
         </li>
-        <li class="recruit">
+        <li class="recruit banner-item" v-if="!hideFlags || !hideFlags.includes('recruit')">
           <a href="https://www.baitoru.com/op121428/alist/"
             ><img
               src="~assets/image/common/banner/bnr-recruit.png"
@@ -17,14 +17,14 @@
           /></a>
         </li>
         <div v-if="shopData">
-          <li class="twitter" v-if="shopData.sns.twitter">
+          <li class="twitter banner-item" v-if="shopData.sns.twitter">
             <a :href="shopData.sns.twitter"
               ><img
                 src="~assets/image/shop/bnr-twitter.gif"
                 alt="ツイッターリンク"
             /></a>
           </li>
-          <li class="insta" v-if="shopData.sns.instagram">
+          <li class="insta banner-item" v-if="shopData.sns.instagram">
             <a :href="shopData.sns.instagram"
               ><img
                 src="~assets/image/shop/bnr-insta.gif"
@@ -45,6 +45,11 @@ export default {
       default: null,
       require: false,
     },
+    hideFlags: {
+      type: Array,
+      default: null,
+      require: false
+    }
   },
 };
 </script>
@@ -72,7 +77,6 @@ export default {
         overflow: hidden;
         filter: drop-shadow(2px 2px 1px #888) grayscale(30%) brightness(100%);
         border: 1px solid #333;
-        margin: 15px 0;
         transition: filter 0.2s ease-in-out;
         &:hover {
           filter: drop-shadow(2px 2px 1px #666) grayscale(0) brightness(110%);

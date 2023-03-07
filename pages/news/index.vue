@@ -38,7 +38,7 @@ export default {
   },
   head() {
     return {
-      title: "とんＱ最新情報 -News-",
+      title: "最新情報 -News-",
       meta: [
         { hid: "og:title", property: "og:title", content: "とんＱの最新情報" },
         {

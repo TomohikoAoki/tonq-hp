@@ -1,10 +1,14 @@
+import axios from "axios";
+
 export default {
     // Target: https://go.nuxtjs.dev/config-target
+    mode: 'universal',
     target: "static",
 
     // Global page headers: https://go.nuxtjs.dev/config-head
     head: {
         title: "とんかつとんＱ",
+        titleTemplate: ' %s | とんかつとんＱ',
         htmlAttrs: {
             lang: "ja",
             prefix: "og: http://ogp.me/ns#",
@@ -28,6 +32,8 @@ export default {
         ],
         link: [
             { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+            { rel: "icon", type: "image/vnd.microsoft.icon", href: "/favicon.png" },
+            { rel: "apple-touch-icon-precomposed", href: "/apple-touch-icon-precomposed.png" },
             {
                 href: "https://fonts.googleapis.com/icon?family=Material+Icons",
                 rel: "stylesheet",
@@ -50,7 +56,9 @@ export default {
         "@/plugins/utils",
         '~/plugins/jsonld'
     ],
-    axios: {},
+    axios: {
+        timeout: 5000
+    },
 
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: true,
@@ -91,7 +99,14 @@ export default {
             },
         ],
         "@nuxtjs/dotenv",
+        '@nuxtjs/sitemap',
     ],
+    sitemap: {
+        hostname: 'https://ton-q.com',
+        exclude: [
+            '/news/form','/news/form/**','/error','/error/**'
+          ],
+    },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {
@@ -114,8 +129,20 @@ export default {
         },
     },
     router: {
-        scrollBehavior: function(to, from, savedPosition) {
+        scrollBehavior: function (to, from, savedPosition) {
             return { x: 0, y: 0 }
         }
-    }
+    },
+    generate: {
+        fallback: true,
+        routes() {
+          return axios
+            .get(`${process.env.API_NEWS_BASE_URL}/posts/ids`)
+            .then(({ data }) => {
+              return data.data.map(item => {
+                return `/news/${item.id}`;
+              });
+            });
+        }
+      }
 };

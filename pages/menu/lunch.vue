@@ -80,7 +80,7 @@ export default {
   },
   head() {
     return {
-      title: "とんＱのランチ -Lunch Menu-",
+      title: "ランチ -Lunch Menu-",
       meta: [
         { hid: "og:title", property: "og:title", content: "とんＱのランチ" },
         {

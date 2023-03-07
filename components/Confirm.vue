@@ -18,6 +18,13 @@ import {
 } from "body-scroll-lock";
 
 export default {
+  props: {
+    backTo: {
+      type: String,
+      default: 'top',
+      require: false,
+    }
+  },
   computed: {
     ...mapGetters({
       flag: "news/getSuccessFlag",
@@ -26,7 +33,15 @@ export default {
   methods: {
     changeSuccessFlag() {
       this.$store.dispatch('news/changeSuccessFlag')
-      this.$router.push('/news/form/')
+      switch (this.backTo) {
+        case 'fetch': this.$emit('fetchNews')
+          break;
+        case 'prevPage': this.$emit('fetchPage')
+          break;
+        case 'referrer': this.$router.back();
+          break;
+        default: this.$router.push('/news/form/');
+      }
     }
   },
   mounted() {

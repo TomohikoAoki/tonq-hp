@@ -44,7 +44,7 @@ export default {
   },
   head() {
     return {
-      title: "とんＱのグランドメニュー -Ground Menu-",
+      title: "グランドメニュー -Ground Menu-",
       meta: [
         { hid: "og:title", property: "og:title", content: "グランドメニュー" },
         {

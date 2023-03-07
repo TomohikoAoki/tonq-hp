@@ -22,39 +22,17 @@
         </ul>
       </nav>
     </div>
-    <div class="banner">
-      <nav class="banner-link">
-        <ul class="banner-link__list">
-          <li class="recruit">
-            <a href=""
-              ><img
-                src="~assets/image/shop/bnr-recruit.png"
-                alt="求人情報リンク"
-            /></a>
-          </li>
-          <li class="twitter" v-if="shopData.sns.twitter">
-            <a :href="shopData.sns.twitter"
-              ><img
-                src="~assets/image/shop/bnr-twitter.gif"
-                alt="ツイッターリンク"
-            /></a>
-          </li>
-          <li class="insta" v-if="shopData.sns.instagram">
-            <a :href="shopData.sns.instagram"
-              ><img
-                src="~assets/image/shop/bnr-insta.gif"
-                alt="インスタグラムリンク"
-            /></a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <Banner :shopData="shopData" :hideFlags="['qcard']" class="banner"></Banner>
   </div>
 </template>
 
 <script>
+import Banner from '../common/banner'
 export default {
   props: ["shopData"],
+  components: {
+    Banner,
+  }
 };
 </script>
 
@@ -114,45 +92,9 @@ export default {
   }
 }
 .banner {
-  width: 350px;
-  @media screen and (max-width: 900px) {
-    width: 40%;
-  }
-  @media screen and (max-width: 550px) {
-    width: 350px;
-    margin: 0 auto;
-  }
-  .banner-link {
-    &__list {
-      li {
-        width: 100%;
-        border-radius: 10px;
-        overflow: hidden;
-        filter: drop-shadow(2px 2px 1px #888) grayscale(30%);
-        border: 1px solid #333;
-        margin: 15px 0;
-        &:hover {
-          filter: drop-shadow(2px 2px 1px #666) brightness(110%);
-        }
-        &.recruit {
-          border: 1px solid #333;
-        }
-        &.twitter {
-          border: 1px solid rgb(32, 81, 121);
-        }
-        &.insta {
-          border: 1px solid rgb(93, 22, 95);
-        }
-        a {
-          display: block;
-          width: 100%;
-          height: 100%;
-          img {
-            width: 100%;
-          }
-        }
-      }
-    }
+  padding-top: 1em;
+  :deep(.banner-item) {
+    margin: 10px 0;
   }
 }
 </style>

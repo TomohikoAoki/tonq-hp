@@ -207,7 +207,7 @@ export default {
   },
   head() {
     return {
-      title: "とんＱのテイクアウト -takeout Menu-",
+      title: "テイクアウト -takeout Menu-",
       meta: [
         { hid: "og:title", property: "og:title", content: "とんＱのテイクアウト" },
         {
